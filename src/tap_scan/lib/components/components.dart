@@ -193,3 +193,62 @@ class _MainDropDownState extends State<MainDropDown> {
     );
   }
 }
+
+class MainNavBar extends StatelessWidget {
+  final int activeIndex;
+  const MainNavBar({super.key, required this.activeIndex});
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> pages = ["MY SCANS", "DOCUMENTS", "PDF"];
+    List<Function> goTos = [goToMyScans, goToMyDocs, goToPdf];
+
+    double horizontalPadding = activeIndex == 1 ? 10 : 30.0;
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Container(
+        width: 300,
+        decoration: const BoxDecoration(
+          color: Color.fromRGBO(0, 166, 194, 1),
+          borderRadius: BorderRadius.all(Radius.circular(30)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: pages
+              .asMap()
+              .map((i, page) => MapEntry(
+                  i,
+                  TextButton(
+                    style: i == activeIndex
+                        ? ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              const Color.fromRGBO(0, 94, 109, 1),
+                            ),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.only(
+                                  right: horizontalPadding,
+                                  left: horizontalPadding),
+                            ),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(30.0),
+                                ),
+                              ),
+                            ),
+                          )
+                        : const ButtonStyle(),
+                    onPressed: () => goTos[i](context),
+                    child: Text(
+                      page,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  )))
+              .values
+              .toList(),
+        ),
+      ),
+    );
+  }
+
