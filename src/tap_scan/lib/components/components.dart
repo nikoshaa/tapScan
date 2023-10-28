@@ -1,5 +1,4 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tap_scan/pages/documents_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
@@ -121,6 +120,74 @@ class ContinueWithGoogleButton extends StatelessWidget {
               width: 40,
             )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class MainDropDown extends StatefulWidget {
+  final List<String> items;
+
+  const MainDropDown({super.key, required this.items});
+
+  @override
+  State<MainDropDown> createState() => _MainDropDownState();
+}
+
+class _MainDropDownState extends State<MainDropDown> {
+  @override
+  Widget build(BuildContext context) {
+    String? selectedValue;
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2<String>(
+        isExpanded: true,
+        hint: const Row(
+          children: [
+            SizedBox(
+              width: 4,
+            ),
+            Expanded(
+              child: Text(
+                'Select',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+        items: widget.items
+            .map((String item) => DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(
+                    item,
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ))
+            .toList(),
+        value: selectedValue,
+        onChanged: (String? value) {
+          setState(() {
+            selectedValue = value;
+          });
+        },
+        buttonStyleData: ButtonStyleData(
+          height: 30,
+          width: 140,
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            color: const Color.fromRGBO(214, 247, 253, 1),
+          ),
+          elevation: 2,
+        ),
+        menuItemStyleData: const MenuItemStyleData(
+          height: 40,
         ),
       ),
     );
