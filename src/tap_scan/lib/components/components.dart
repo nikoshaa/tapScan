@@ -1,4 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tap_scan/pages/documents_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
@@ -251,4 +252,145 @@ class MainNavBar extends StatelessWidget {
       ),
     );
   }
+}
 
+goToMyScans(context) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => const MyScansPage(),
+    ),
+  );
+}
+
+goToMyDocs(context) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => const DocumentsPage(),
+    ),
+  );
+}
+
+goToPdf(context) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => const PdfPage(),
+    ),
+  );
+}
+
+class KtpCard extends StatelessWidget {
+  const KtpCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: const Color.fromRGBO(0, 198, 232, 1),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Image.asset(
+              kIsWeb ? 'images/ktp.png' : 'assets/images/ktp.png',
+              height: 50,
+            ),
+            const Column(
+              children: [
+                Text("ID Card 1"),
+                Icon(
+                  Icons.check_box_rounded,
+                  color: Color.fromRGBO(204, 255, 210, 1),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class IconCard extends StatelessWidget {
+  final IconData iconData;
+  const IconCard({super.key, required this.iconData});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: const Color.fromRGBO(0, 198, 232, 1),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(
+              width: 20,
+            ),
+            Icon(
+              iconData,
+              color: Colors.white,
+              size: 40,
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Sample Document",
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
+                Text(
+                  "25/20/2023",
+                  style: TextStyle(
+                      fontSize: 12, color: Color.fromRGBO(0, 94, 109, 1)),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MainBottomNavBar extends StatelessWidget {
+  const MainBottomNavBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: "Home",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: "Profile",
+        ),
+      ],
+    );
+  }
+}
+
+class MainFloatingActionButton extends StatelessWidget {
+  const MainFloatingActionButton({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.extended(
+      backgroundColor: const Color.fromRGBO(255, 240, 44, 1),
+      onPressed: () {},
+      label: const Text(''),
+      icon: const Icon(Icons.camera),
+      elevation: 4.0,
+    );
+  }
+}
