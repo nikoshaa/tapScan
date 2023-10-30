@@ -20,18 +20,22 @@ tapScan stands for I2T (Image-to-Text) is an application that lets you convert t
 
 ## Screen dan PIC
 
-| No. | Nama Screen        | Fitur            | PIC                                               |
-| --- | ------------------ | ---------------- | ------------------------------------------------- |
-| 1   | Splash and Welcome | Splash           | ![welcome_page.png](docs/assets/welcome_page.png) |
-| 2   | Onboarding         | Onboarding       | ![onboard-1.png](docs/assets/onboard-1.png)       |
-| 3   | Onboarding         | Onboarding       | ![onboard-2.png](docs/assets/onboard-2.png)       |
-| 4   | Onboarding         | Onboarding       | ![onboard-3_page.png](docs/assets/onboard-3.png)  |
-| 5   | Login              | Login            | ![login.png](docs/assets/login.png)               |
-| 6   | Register           | Register         | ![register.png](docs/assets/register.png)         |
-| 7   | History Scan       | History Scan     | ![my-scans.png](docs/assets/my-scans.png)         |
-| 8   | History Scan Doc   | History Scan Doc | ![documents.png](docs/assets/documents.png)       |
-| 9   | History Scan PDF   | History Scan PDF | ![pdf.png](docs/assets/pdf.png)                   |
-| 10  | Search History     | Search History   | ![search.png](docs/assets/search.png)             |
+| No. | Nama Screen        | Fitur            | PIC                                                  |
+| --- | ------------------ | ---------------- | ---------------------------------------------------- |
+| 1   | Splash and Welcome | Splash           | ![welcome_page.png](docs/assets/welcome_page.png)    |
+| 2   | Onboarding         | Onboarding       | ![onboard-1.png](docs/assets/onboard-1.png)          |
+| 3   | Onboarding         | Onboarding       | ![onboard-2.png](docs/assets/onboard-2.png)          |
+| 4   | Onboarding         | Onboarding       | ![onboard-3_page.png](docs/assets/onboard-3.png)     |
+| 5   | Login              | Login            | ![login.png](docs/assets/login.png)                  |
+| 6   | Register           | Register         | ![register.png](docs/assets/register.png)            |
+| 7   | History Scan       | History Scan     | ![my-scans.png](docs/assets/my-scans.png)            |
+| 8   | History Scan Doc   | History Scan Doc | ![documents.png](docs/assets/documents.png)          |
+| 9   | History Scan PDF   | History Scan PDF | ![pdf.png](docs/assets/pdf.png)                      |
+| 10  | Search History     | Search History   | ![search.png](docs/assets/search.png)                |
+| 11  | Scan               | Scan             | ![Scan.svg](docs/assets/Scan.svg)                    |
+| 11  | Scan Validate      | Scan Validate    | ![ScanValidate.svg](docs/assets/Scan%20Validate.svg) |
+| 11  | Scan Result - 1    | Scan Result - 1  | ![Scan.svg](docs/assets/Scan%20Result%20-%201.svg)   |
+| 11  | Scan Result - 2    | Scan Result - 2  | ![Scan.svg](docs/assets/Scan%20Result%20-%202.svg)   |
 
 ## GIF Result
 
