@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:tap_scan/pages/documents_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
 import 'package:tap_scan/pages/pdf_page.dart';
+import 'package:tap_scan/pages/profile_page.dart';
 
 class MainButton extends StatelessWidget {
   final String buttonText;
+  final Color color;
   final Function() function;
   final double horizontalPadding;
   final IconData? iconData;
@@ -16,6 +18,7 @@ class MainButton extends StatelessWidget {
     required this.function,
     this.horizontalPadding = 40.0,
     this.iconData,
+    this.color = const Color.fromRGBO(255, 240, 44, 1),
   });
 
   @override
@@ -25,8 +28,7 @@ class MainButton extends StatelessWidget {
         icon: Icon(iconData),
         onPressed: function,
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(
-              const Color.fromRGBO(255, 240, 44, 1)),
+          backgroundColor: MaterialStateProperty.all<Color>(color),
         ),
         label: Padding(
           padding: EdgeInsets.only(
@@ -47,8 +49,7 @@ class MainButton extends StatelessWidget {
       return FilledButton(
         onPressed: function,
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(
-              const Color.fromRGBO(255, 240, 44, 1)),
+          backgroundColor: MaterialStateProperty.all<Color>(color),
         ),
         child: Padding(
           padding: EdgeInsets.only(
@@ -361,12 +362,32 @@ class IconCard extends StatelessWidget {
   }
 }
 
-class MainBottomNavBar extends StatelessWidget {
-  const MainBottomNavBar({super.key});
+class MainBottomNavBar extends StatefulWidget {
+  final int index;
+  const MainBottomNavBar({super.key, this.index = 0});
+
+  @override
+  State<MainBottomNavBar> createState() => _MainBottomNavBarState();
+}
+
+class _MainBottomNavBarState extends State<MainBottomNavBar> {
+  final List<Widget> pages = [
+    const MyScansPage(),
+    const ProfilePage(),
+  ];
+  void _onItemTapped(index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => pages[index],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      currentIndex: widget.index,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -377,6 +398,7 @@ class MainBottomNavBar extends StatelessWidget {
           label: "Profile",
         ),
       ],
+      onTap: _onItemTapped,
     );
   }
 }
@@ -387,10 +409,68 @@ class MainFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       backgroundColor: const Color.fromRGBO(255, 240, 44, 1),
-      onPressed: () {},
+      onPressed: () {
+        showModalBottomSheet<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return const ModalBottomSheetContent();
+          },
+        );
+      },
       label: const Text(''),
       icon: const Icon(Icons.camera),
       elevation: 4.0,
+    );
+  }
+}
+
+class ModalBottomSheetContent extends StatelessWidget {
+  const ModalBottomSheetContent({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 500,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const Text(
+              'Import an image to be converted',
+              style: TextStyle(color: Color.fromRGBO(255, 240, 44, 1)),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            MainButton(
+              function: () {},
+              buttonText: "TAKE A PICTURE",
+              iconData: Icons.camera_alt_outlined,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            MainButton(
+              function: () {},
+              buttonText: "GALLERY",
+              iconData: Icons.photo,
+              horizontalPadding: 70,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            MainButton(
+              function: () {},
+              buttonText: "IMPORT PDF",
+              iconData: Icons.picture_as_pdf_outlined,
+              horizontalPadding: 55,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
