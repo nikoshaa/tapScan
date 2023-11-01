@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/layouts/main_layout_page.dart';
+import 'package:tap_scan/pages/scan_result.dart';
 
 class ScanValidate extends StatelessWidget {
   const ScanValidate({super.key});
@@ -9,51 +10,62 @@ class ScanValidate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainLayoutPage(
-      widget: SizedBox(
-        height: 400,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              kIsWeb
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.asset("images/ktp.png"),
-                    )
-                  : Image.asset("assets/images/ktp.png"),
-              const SizedBox(
-                height: 20,
-              ),
-              const TextValidate(
-                text: "7312042510720002",
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const TextValidate(
-                text: "7312042510720002",
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const TextValidate(
-                text: "7312042510720002",
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const TextValidate(
-                text: "7312042510720002",
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              MainButton(
-                function: () {},
-                buttonText: "Submit",
-              )
-            ],
+      whiteBoxTopPadding: 100,
+      leftIcon: Icons.arrow_back,
+      rightIcon: Icons.more_horiz,
+      widget: Column(
+        children: [
+          kIsWeb
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset("images/ktp.png"),
+                )
+              : Image.asset("assets/images/ktp.png"),
+          const SizedBox(
+            height: 20,
           ),
-        ),
+          const TextValidate(
+            text: "7312042510720002",
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          const TextValidate(
+            text: "ABDURRAUF, S.Pd, M.Pd",
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          const TextValidate(
+            text: "CELLENGENGE, 25-10-1972",
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          const TextValidate(
+            text: "LAKI-LAKI",
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          const TextValidate(
+            text: "JL. MERDEKA NO 43",
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          MainButton(
+            function: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ScanResult(),
+                ),
+              );
+            },
+            buttonText: "Submit",
+          )
+        ],
       ),
       cleanLayout: true,
       title: "Verification Validate",

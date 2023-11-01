@@ -7,13 +7,22 @@ class MainLayoutPage extends StatelessWidget {
   final String description;
   final int activeIndex;
   final bool cleanLayout;
+  final double whiteBoxTopPadding;
+  final IconData leftIcon;
+  final IconData rightIcon;
+  final bool useFixedBottomBar;
+
   const MainLayoutPage({
     super.key,
     required this.widget,
     this.activeIndex = 0,
-    this.cleanLayout = true,
+    this.cleanLayout = false,
     this.title = "My Scans",
     this.description = "",
+    this.whiteBoxTopPadding = 200,
+    this.leftIcon = Icons.search,
+    this.rightIcon = Icons.settings,
+    this.useFixedBottomBar = false,
   });
 
   @override
@@ -28,9 +37,15 @@ class MainLayoutPage extends StatelessWidget {
               MainBackGround(
                 title: title,
                 description: description,
+                leftIcon: leftIcon,
+                rightIcon: rightIcon,
               ),
               //white box
-              WhiteBox(mediaQueryData: mediaQueryData, widget: widget),
+              WhiteBox(
+                mediaQueryData: mediaQueryData,
+                widget: widget,
+                whiteBoxTopPadding: whiteBoxTopPadding,
+              ),
               Container(
                 padding: const EdgeInsets.only(top: 70),
                 alignment: Alignment.topCenter,
@@ -38,6 +53,7 @@ class MainLayoutPage extends StatelessWidget {
                     ? Container()
                     : MainNavBar(activeIndex: activeIndex),
               ),
+              useFixedBottomBar ? const FixedBottomBar() : Container()
             ],
           ),
           floatingActionButton:
@@ -52,29 +68,32 @@ class MainLayoutPage extends StatelessWidget {
 }
 
 class WhiteBox extends StatelessWidget {
-  const WhiteBox(
-      {super.key,
-      required this.mediaQueryData,
-      required this.widget,
-      this.cleanLayout = true});
+  const WhiteBox({
+    super.key,
+    required this.mediaQueryData,
+    required this.widget,
+    this.cleanLayout = true,
+    required this.whiteBoxTopPadding,
+  });
 
   final MediaQueryData mediaQueryData;
   final Widget widget;
   final bool cleanLayout;
+  final double whiteBoxTopPadding;
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const SizedBox(
-            height: 200,
+          SizedBox(
+            height: whiteBoxTopPadding,
           ),
           MediaQuery(
             data: mediaQueryData,
             child: SizedBox(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height - 200,
+              height: MediaQuery.of(context).size.height + 50,
               child: Container(
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
@@ -105,8 +124,16 @@ class WhiteBox extends StatelessWidget {
 class MainBackGround extends StatelessWidget {
   final String title;
   final String description;
-  const MainBackGround(
-      {super.key, required this.title, required this.description});
+  final IconData leftIcon;
+  final IconData rightIcon;
+
+  const MainBackGround({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.leftIcon,
+    required this.rightIcon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -122,8 +149,8 @@ class MainBackGround extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  const Icon(
-                    Icons.search,
+                  Icon(
+                    leftIcon,
                     color: Colors.white,
                   ),
                   Text(
@@ -133,8 +160,8 @@ class MainBackGround extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  const Icon(
-                    Icons.settings,
+                  Icon(
+                    rightIcon,
                     color: Colors.white,
                   ),
                 ],
@@ -219,6 +246,80 @@ class EmptyBottomNavBar extends StatelessWidget {
         items: const [
           BottomNavigationBarItem(icon: Icon(IconData(0)), label: ""),
           BottomNavigationBarItem(icon: Icon(IconData(0)), label: ""),
+        ],
+      ),
+    );
+  }
+}
+
+class FixedBottomBar extends StatelessWidget {
+  const FixedBottomBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: 0, // Position it at the bottom
+      left: 0, // Align it to the left (you can adjust this as needed)
+      right: 0, // Align it to the right (you can adjust this as needed)
+      child: Container(
+        width: double.infinity,
+        height: 80,
+        color: const Color.fromRGBO(16, 152, 174, 1),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FixedBottomBarItem(
+              icon: Icons.document_scanner,
+              label: "Document",
+            ),
+            FixedBottomBarItem(
+              icon: Icons.document_scanner,
+              label: "Pdf",
+            ),
+            FixedBottomBarItem(
+              icon: Icons.copy,
+              label: "Copy",
+            ),
+            FixedBottomBarItem(
+              icon: Icons.search,
+              label: "Search",
+            ),
+            FixedBottomBarItem(
+              icon: Icons.share,
+              label: "Share",
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FixedBottomBarItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  const FixedBottomBarItem({
+    super.key,
+    required this.icon,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: Colors.white,
+          ),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          )
         ],
       ),
     );

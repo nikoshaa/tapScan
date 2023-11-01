@@ -5,6 +5,7 @@ import 'package:tap_scan/pages/documents_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
 import 'package:tap_scan/pages/pdf_page.dart';
 import 'package:tap_scan/pages/profile_page.dart';
+import 'package:tap_scan/pages/scan_page.dart';
 
 class MainButton extends StatelessWidget {
   final String buttonText;
@@ -446,7 +447,14 @@ class ModalBottomSheetContent extends StatelessWidget {
               height: 30,
             ),
             MainButton(
-              function: () {},
+              function: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ScanPage(),
+                  ),
+                );
+              },
               buttonText: "TAKE A PICTURE",
               iconData: Icons.camera_alt_outlined,
             ),
