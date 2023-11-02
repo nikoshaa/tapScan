@@ -31,19 +31,18 @@ tapScan stands for I2T (Image-to-Text) is an application that lets you convert t
 | 7   | History Scan       | A feature that allows users to view the history of previously scanned documents. With this feature, users can easily track documents that have been scanned and access them again without having to re-scan. | ![MyScans.svg](docs/assets/MyScans.svg)               | ![my-scans.png](docs/assets/my-scans.png)               | Ziedny |
 | 8   | History Scan Doc   | A feature that allows users to view the history of previously scanned documents. With this feature, users can easily track documents that have been scanned and access them again without having to re-scan. | ![Dashboard.svg](docs/assets/Dashboard.svg)           | ![documents.png](docs/assets/documents.png)             | Ziedny |
 | 9   | History Scan PDF   | A feature that allows users to view the history of previously scanned documents. With this feature, users can easily track documents that have been scanned and access them again without having to re-scan. | ![PDF.svg](docs/assets/PDF.svg)                       | ![pdf.png](docs/assets/pdf.png)                         | Ziedny |
-| 10  | Search History     | A search feature that allows users to search for documents based on certain keywords. With this feature, users can easily find the desired documents without having to look one by one.                      | ![Search.svg](docs/assets/Search.svg)                 | ![search.png](docs/assets/search.png)                   | Farhan |
+| 10  | Search History     | A search feature that allows users to search for documents based on certain keywords. With this feature, users can easily find the desired documents without having to look one by one.                      | ![Search.svg](docs/assets/Search.svg)                 | ![search.png](docs/assets/search.png)                   | Wildan |
 | 11  | Processing Scan    | The function opens the camera to scan the document.                                                                                                                                                          | ![ProcessingScan.svg](docs/assets/ProcessingScan.svg) | ![processing_scan.png](docs/assets/processing_scan.png) | Dhayu  |
 | 12  | Scan               | The scan function allows users to scan documents and convert them into editable and searchable PDF files.                                                                                                    | ![Scan.svg](docs/assets/Scan.svg)                     | ![scan.png](docs/assets/scan.png)                       | Dhayu  |
-| 14  | OCR                | The scan function allows users to scan documents and convert them into editable and searchable PDF files.                                                                                                    | ![OCR.svg](docs/assets/OCR.svg)                       |                                                         | Ziedny |
-| 14  | OCR-1              | The scan function allows users to scan documents and convert them into editable and searchable PDF files.                                                                                                    | ![OCR-1.svg](docs/assets/OCR-1.svg)                   |                                                         | Ziedny |
-| 15  | Scan Validate      | A feature that validates scanned documents to ensure that they have been scanned correctly and in accordance with standards.                                                                                 | ![ScanValidate.svg](docs/assets/ScanValidate.svg)     | ![scan_validate.png](docs/assets/scan_validate.png)     | Zaky   |
-| 16  | Scan Result - 1    | With this feature, users can view their scanned documents and access them again without having to re-scan.                                                                                                   | ![ScanResult.svg](docs/assets/ScanResult.svg)         | ![scan_result.png](docs/assets/scan_result.png)         | Farhan |
-| 17  | Scan Result - 2    | With this feature, users can view their scanned documents and access them again without having to re-scan.                                                                                                   | ![Scan.svg](docs/assets/Scan%20Result%20-%202.svg)    |                                                         | Farhan |
-| 18  | Profile            | Function to change user profile information such as name, profile photo, email, etc.                                                                                                                         | ![profile.svg](docs/assets/profile.svg)               | ![profile.png](docs/assets/profile.png)                 | Wildan |
+| 13  | OCR                | The scan function allows users to scan documents and convert them into editable and searchable PDF files.                                                                                                    | ![OCR.svg](docs/assets/OCR.svg)                       | ![OCR.png](docs/assets/OCR.png)                         | Farhan |
+| 14  | OCR-1              | The scan function allows users to scan documents and convert them into editable and searchable PDF files.                                                                                                    | ![OCR-1.svg](docs/assets/OCR-1.svg)                   | ![OCR1.png](docs/assets/OCR-1.svg)                      | Farhan |
+| 15  | Scan Validate      | A feature that validates scanned documents to ensure that they have been scanned correctly and in accordance with standards.                                                                                 | ![ScanValidate.svg](docs/assets/ScanValidate.svg)     | ![scan_validate.png](docs/assets/scan_validate.png)     | Farhan |
+| 16  | Scan Result - 1    | With this feature, users can view their scanned documents and access them again without having to re-scan.                                                                                                   | ![ScanResult.svg](docs/assets/ScanResult.svg)         | ![scan_result.png](docs/assets/scan_result.png)         | Zaky   |
+| 17  | Profile            | Function to change user profile information such as name, profile photo, email, etc.                                                                                                                         | ![profile.svg](docs/assets/profile.svg)               | ![profile.png](docs/assets/profile.png)                 | Ziedny |
 
-## GIF Result
+## Youtube Presentation
 
-![screen.gif](docs/result/screen.gif)
+[Youtube](https://youtu.be/p957mX7VmD4)
 
 ## Figma Link
 
@@ -59,8 +58,8 @@ tapScan stands for I2T (Image-to-Text) is an application that lets you convert t
 
 ## Credits
 
-[Fonts Poppins](https://fonts.google.com/specimen/Poppins)
-[Icon API Flutter Dev](https://api.flutter.dev/flutter/widgets/Icon-class.html)
+- [Fonts Poppins](https://fonts.google.com/specimen/Poppins)
+- [Icon API Flutter Dev](https://api.flutter.dev/flutter/widgets/Icon-class.html)
 
 ## License
 
