@@ -11,6 +11,8 @@ class MainLayoutPage extends StatelessWidget {
   final IconData leftIcon;
   final IconData rightIcon;
   final bool useFixedBottomBar;
+  final Function() leftIconFunction;
+  final Function() rightIconFunction;
 
   const MainLayoutPage({
     super.key,
@@ -23,7 +25,11 @@ class MainLayoutPage extends StatelessWidget {
     this.leftIcon = Icons.search,
     this.rightIcon = Icons.settings,
     this.useFixedBottomBar = false,
+    this.leftIconFunction = defaultFunction,
+    this.rightIconFunction = defaultFunction,
   });
+
+  static void defaultFunction() {}
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +50,8 @@ class MainLayoutPage extends StatelessWidget {
                 description: description,
                 leftIcon: leftIcon,
                 rightIcon: rightIcon,
+                leftIconFunction: leftIconFunction,
+                rightIconFunction: rightIconFunction,
               ),
               Container(
                 padding: const EdgeInsets.only(top: 70),
@@ -77,6 +85,8 @@ class WhiteBox extends StatelessWidget {
     required this.title,
     required this.leftIcon,
     required this.rightIcon,
+    required this.rightIconFunction,
+    required this.leftIconFunction,
   });
 
   final MediaQueryData mediaQueryData;
@@ -86,7 +96,9 @@ class WhiteBox extends StatelessWidget {
   final String title;
   final String description;
   final IconData leftIcon;
+  final Function() leftIconFunction;
   final IconData rightIcon;
+  final Function() rightIconFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -99,14 +111,20 @@ class WhiteBox extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(
-                  leftIcon,
-                  color: Colors.white,
+                InkWell(
+                  onTap: () => leftIconFunction(),
+                  child: Icon(
+                    leftIcon,
+                    color: Colors.white,
+                  ),
                 ),
-                Text(
-                  title,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w700, color: Colors.white),
+                InkWell(
+                  onTap: () => rightIconFunction(),
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700, color: Colors.white),
+                  ),
                 ),
                 Icon(
                   rightIcon,

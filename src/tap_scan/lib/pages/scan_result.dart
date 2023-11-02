@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:tap_scan/layouts/main_layout_page.dart';
+import 'package:tap_scan/pages/my_scans_page.dart';
 
 class ScanResult extends StatelessWidget {
   const ScanResult({super.key});
 
   @override
   Widget build(BuildContext context) {
+    goToMain() {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const MyScansPage(),
+        ),
+      );
+    }
+
     return MainLayoutPage(
       useFixedBottomBar: true,
+      leftIconFunction: goToMain,
       widget: Container(
         child: const Column(
           children: [

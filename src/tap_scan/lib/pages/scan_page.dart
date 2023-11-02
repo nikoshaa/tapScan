@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/layouts/main_layout_page.dart';
+import 'package:tap_scan/pages/my_scans_page.dart';
 import 'package:tap_scan/pages/scan_validate.dart';
 
 class ScanPage extends StatelessWidget {
@@ -9,9 +10,18 @@ class ScanPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    goToMain() {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const MyScansPage(),
+        ),
+      );
+    }
+
     return MainLayoutPage(
       leftIcon: Icons.arrow_back,
       rightIcon: Icons.more_horiz,
+      leftIconFunction: goToMain,
       description:
           "Point the camera at the ID card you want to verify Make sure the image is clear",
       title: "Verification",

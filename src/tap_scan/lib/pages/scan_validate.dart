@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/layouts/main_layout_page.dart';
+import 'package:tap_scan/pages/my_scans_page.dart';
 import 'package:tap_scan/pages/scan_result.dart';
 
 class ScanValidate extends StatelessWidget {
@@ -9,10 +10,19 @@ class ScanValidate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    goToMain() {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const MyScansPage(),
+        ),
+      );
+    }
+
     return MainLayoutPage(
       whiteBoxTopPadding: 0,
       leftIcon: Icons.arrow_back,
       rightIcon: Icons.more_horiz,
+      leftIconFunction: goToMain,
       widget: Column(
         children: [
           kIsWeb
