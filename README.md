@@ -37,12 +37,12 @@ tapScan stands for I2T (Image-to-Text) is an application that lets you convert t
 | 13  | OCR                | The scan function allows users to scan documents and convert them into editable and searchable PDF files.                                                                                                    | ![OCR.svg](docs/assets/OCR.svg)                       | ![OCR.png](docs/assets/OCR.png)                         | Farhan |
 | 14  | OCR-1              | The scan function allows users to scan documents and convert them into editable and searchable PDF files.                                                                                                    | ![OCR-1.svg](docs/assets/OCR-1.svg)                   | ![OCR1.png](docs/assets/OCR-1.svg)                      | Farhan |
 | 15  | Scan Validate      | A feature that validates scanned documents to ensure that they have been scanned correctly and in accordance with standards.                                                                                 | ![ScanValidate.svg](docs/assets/ScanValidate.svg)     | ![scan_validate.png](docs/assets/scan_validate.png)     | Farhan |
-| 16  | Scan Result - 1    | With this feature, users can view their scanned documents and access them again without having to re-scan.                                                                                                   | ![ScanResult.svg](docs/assets/ScanResult.svg)         | ![scan_result.png](docs/assets/scan_result.png)         | Zaky   |
+| 16  | Scan Result        | With this feature, users can view their scanned documents and access them again without having to re-scan.                                                                                                   | ![ScanResult.svg](docs/assets/ScanResult.svg)         | ![scan_result.png](docs/assets/scan_result.png)         | Zaky   |
 | 17  | Profile            | Function to change user profile information such as name, profile photo, email, etc.                                                                                                                         | ![profile.svg](docs/assets/profile.svg)               | ![profile.png](docs/assets/profile.png)                 | Ziedny |
 
-## Youtube Presentation
+## Youtube Link
 
-[Youtube](https://youtu.be/p957mX7VmD4)
+[Youtube - Group 6](https://youtu.be/p957mX7VmD4)
 
 ## Figma Link
 
