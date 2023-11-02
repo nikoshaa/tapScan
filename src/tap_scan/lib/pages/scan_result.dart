@@ -18,6 +18,7 @@ class ScanResult extends StatelessWidget {
     return MainLayoutPage(
       useFixedBottomBar: true,
       leftIconFunction: goToMain,
+      rightIconFunction: () {},
       widget: Container(
         child: const Column(
           children: [

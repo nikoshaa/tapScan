@@ -37,6 +37,7 @@ dependencies:
   flutter_onboard: ^2.0.0
   flutter_native_splash: ^2.3.4
   dropdown_button2: ^2.3.9
+  percent_indicator: ^4.0.1
 
 dev_dependencies:
   flutter_test:

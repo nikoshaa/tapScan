@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:tap_scan/pages/documents_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
 import 'package:tap_scan/pages/pdf_page.dart';
@@ -479,6 +480,58 @@ class ModalBottomSheetContent extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class MainProcessIndicator extends StatelessWidget {
+  final double percent;
+  final String label;
+  final String description;
+  const MainProcessIndicator({
+    super.key,
+    required this.percent,
+    this.label = "",
+    this.description = "",
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CircularPercentIndicator(
+      radius: 120.0,
+      lineWidth: 13.0,
+      animation: true,
+      percent: percent,
+      center: Text(
+        "${(percent * 100).toString()}%",
+        style: const TextStyle(
+            fontWeight: FontWeight.bold, fontSize: 60.0, color: Colors.white),
+      ),
+      footer: Padding(
+        padding: const EdgeInsets.only(top: 32.0),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 30,
+            ),
+            Text(
+              label,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17.0,
+                  color: Colors.white),
+            ),
+            Text(
+              description,
+              style: const TextStyle(fontSize: 14.0, color: Colors.white),
+            ),
+          ],
+        ),
+      ),
+      circularStrokeCap: CircularStrokeCap.round,
+      progressColor: const Color.fromRGBO(255, 240, 44, 1),
+      backgroundColor: const Color.fromRGBO(87, 190, 146, 1),
+      backgroundWidth: 3,
     );
   }
 }
