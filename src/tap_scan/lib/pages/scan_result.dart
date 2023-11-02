@@ -46,7 +46,7 @@ class ScanResult extends StatelessWidget {
       leftIcon: Icons.arrow_back,
       rightIcon: Icons.more_horiz,
       title: "Scan Result",
-      whiteBoxTopPadding: 100,
+      whiteBoxTopPadding: 10,
     );
   }
 }

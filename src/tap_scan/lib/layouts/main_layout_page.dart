@@ -19,7 +19,7 @@ class MainLayoutPage extends StatelessWidget {
     this.cleanLayout = false,
     this.title = "My Scans",
     this.description = "",
-    this.whiteBoxTopPadding = 200,
+    this.whiteBoxTopPadding = 100,
     this.leftIcon = Icons.search,
     this.rightIcon = Icons.settings,
     this.useFixedBottomBar = false,
@@ -34,17 +34,16 @@ class MainLayoutPage extends StatelessWidget {
           body: Stack(
             children: [
               //background
-              MainBackGround(
-                title: title,
-                description: description,
-                leftIcon: leftIcon,
-                rightIcon: rightIcon,
-              ),
+              const MainBackGround(),
               //white box
               WhiteBox(
                 mediaQueryData: mediaQueryData,
                 widget: widget,
                 whiteBoxTopPadding: whiteBoxTopPadding,
+                title: title,
+                description: description,
+                leftIcon: leftIcon,
+                rightIcon: rightIcon,
               ),
               Container(
                 padding: const EdgeInsets.only(top: 70),
@@ -74,18 +73,56 @@ class WhiteBox extends StatelessWidget {
     required this.widget,
     this.cleanLayout = true,
     required this.whiteBoxTopPadding,
+    required this.description,
+    required this.title,
+    required this.leftIcon,
+    required this.rightIcon,
   });
 
   final MediaQueryData mediaQueryData;
   final Widget widget;
   final bool cleanLayout;
   final double whiteBoxTopPadding;
+  final String title;
+  final String description;
+  final IconData leftIcon;
+  final IconData rightIcon;
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
+          const SizedBox(),
+          Padding(
+            padding: const EdgeInsets.all(30),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(
+                  leftIcon,
+                  color: Colors.white,
+                ),
+                Text(
+                  title,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w700, color: Colors.white),
+                ),
+                Icon(
+                  rightIcon,
+                  color: Colors.white,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 30, right: 30),
+            child: Text(
+              description,
+              style: const TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ),
           SizedBox(
             height: whiteBoxTopPadding,
           ),
@@ -122,64 +159,16 @@ class WhiteBox extends StatelessWidget {
 }
 
 class MainBackGround extends StatelessWidget {
-  final String title;
-  final String description;
-  final IconData leftIcon;
-  final IconData rightIcon;
-
   const MainBackGround({
     super.key,
-    required this.title,
-    required this.description,
-    required this.leftIcon,
-    required this.rightIcon,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: const Color.fromRGBO(0, 198, 232, 1),
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 50,
-          ),
-          Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Icon(
-                    leftIcon,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Icon(
-                    rightIcon,
-                    color: Colors.white,
-                  ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.all(30),
-                child: Text(
-                  description,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+      width: double.infinity,
+      height: double.infinity,
     );
   }
 }

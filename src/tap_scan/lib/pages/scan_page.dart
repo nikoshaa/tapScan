@@ -57,6 +57,7 @@ class ScanPage extends StatelessWidget {
           ],
         ),
       ),
+      whiteBoxTopPadding: 10,
     );
   }
 }

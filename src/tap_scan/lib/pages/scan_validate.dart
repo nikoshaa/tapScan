@@ -10,7 +10,7 @@ class ScanValidate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainLayoutPage(
-      whiteBoxTopPadding: 100,
+      whiteBoxTopPadding: 0,
       leftIcon: Icons.arrow_back,
       rightIcon: Icons.more_horiz,
       widget: Column(
