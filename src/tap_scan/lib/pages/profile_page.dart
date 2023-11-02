@@ -122,7 +122,7 @@ class ProfilePic extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(90),
         child: Image.asset(
-          "assets/images/ktp.png",
+          "assets/images/profile.png",
           fit: BoxFit.cover,
         ),
       ),
