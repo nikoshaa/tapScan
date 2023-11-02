@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/layouts/main_layout_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
-import 'package:tap_scan/pages/scan_validate.dart';
+import 'package:tap_scan/pages/progrees.dart';
 
 class ScanPage extends StatelessWidget {
   const ScanPage({super.key});
@@ -54,7 +54,7 @@ class ScanPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ScanValidate(),
+                    builder: (context) => const Progress(),
                   ),
                 );
               },

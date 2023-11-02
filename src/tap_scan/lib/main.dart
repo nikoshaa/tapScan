@@ -5,8 +5,13 @@ import 'package:tap_scan/pages/welcome_page.dart';
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  // whenever your initialization is completed, remove the splash screen:
-  FlutterNativeSplash.remove();
+
+// Wait for 3 seconds.
+  Future.delayed(const Duration(seconds: 3), () {
+    // whenever your initialization is completed, remove the splash screen:
+    FlutterNativeSplash.remove();
+  });
+
   runApp(const MyApp());
 }
 
