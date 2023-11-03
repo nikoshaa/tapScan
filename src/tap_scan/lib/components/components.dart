@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:tap_scan/pages/documents_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
@@ -378,10 +379,14 @@ class _MainBottomNavBarState extends State<MainBottomNavBar> {
     const ProfilePage(),
   ];
   void _onItemTapped(index) {
+    var pageTransition = index == 0
+        ? PageTransitionType.leftToRight
+        : PageTransitionType.rightToLeft;
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => pages[index],
+      PageTransition(
+        type: pageTransition,
+        child: pages[index],
       ),
     );
   }
