@@ -380,14 +380,12 @@ class _MainBottomNavBarState extends State<MainBottomNavBar> {
   ];
   void _onItemTapped(index) {
     var pageTransition = index == 0
-        ? PageTransitionType.leftToRight
-        : PageTransitionType.rightToLeft;
+        ? PageTransitionType.leftToRightJoined
+        : PageTransitionType.rightToLeftJoined;
     Navigator.push(
       context,
       PageTransition(
-        type: pageTransition,
-        child: pages[index],
-      ),
+          type: pageTransition, child: pages[index], childCurrent: widget),
     );
   }
 

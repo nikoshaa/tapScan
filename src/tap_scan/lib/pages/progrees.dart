@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/pages/progress_done.dart';
 
@@ -11,9 +12,10 @@ class Progress extends StatelessWidget {
       body: InkWell(
         onTap: () {
           Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const ProgressDone(),
-            ),
+            PageTransition(
+                child: const ProgressDone(),
+                type: PageTransitionType.rightToLeftJoined,
+                childCurrent: this),
           );
         },
         child: Container(

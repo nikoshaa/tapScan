@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/pages/scan_validate.dart';
 
@@ -22,9 +23,10 @@ class ProgressDone extends StatelessWidget {
         MainButton(
           function: () {
             Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const ScanValidate(),
-              ),
+              PageTransition(
+                  child: const ScanValidate(),
+                  type: PageTransitionType.rightToLeftJoined,
+                  childCurrent: this),
             );
           },
           buttonText: "See Result",

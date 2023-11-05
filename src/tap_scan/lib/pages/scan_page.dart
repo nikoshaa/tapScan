@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/layouts/main_layout_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
@@ -53,9 +54,10 @@ class ScanPage extends StatelessWidget {
               function: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const Progress(),
-                  ),
+                  PageTransition(
+                      child: const Progress(),
+                      type: PageTransitionType.rightToLeftJoined,
+                      childCurrent: this),
                 );
               },
               buttonText: "Verification",
