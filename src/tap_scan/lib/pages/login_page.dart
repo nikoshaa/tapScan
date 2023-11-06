@@ -1,15 +1,37 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
 import 'package:tap_scan/pages/register_page.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    EasyLoading.addStatusCallback((status) {
+      if (status == EasyLoadingStatus.dismiss) {
+        _timer?.cancel();
+      }
+    });
+    // EasyLoading.removeCallbacks();
+  }
 
   @override
   Widget build(BuildContext context) {
     TextEditingController usernameController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
+
     return SafeArea(
       child: Material(
         child: Container(
@@ -60,6 +82,11 @@ class LoginPage extends StatelessWidget {
                       builder: (context) => const MyScansPage(),
                     ),
                   );
+                  EasyLoading.showProgress(0.3, status: 'login...');
+
+                  Future.delayed(const Duration(seconds: 1), () {
+                    EasyLoading.dismiss();
+                  });
                 },
                 buttonText: "Login",
                 horizontalPadding: 80,

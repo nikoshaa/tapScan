@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:tap_scan/pages/documents_page.dart';
@@ -535,6 +536,25 @@ class MainProcessIndicator extends StatelessWidget {
       progressColor: const Color.fromRGBO(255, 240, 44, 1),
       backgroundColor: const Color.fromRGBO(87, 190, 146, 1),
       backgroundWidth: 3,
+    );
+  }
+}
+
+class CustomAnimation extends EasyLoadingAnimation {
+  CustomAnimation();
+
+  @override
+  Widget buildWidget(
+    Widget child,
+    AnimationController controller,
+    AlignmentGeometry alignment,
+  ) {
+    return Opacity(
+      opacity: controller.value,
+      child: RotationTransition(
+        turns: controller,
+        child: child,
+      ),
     );
   }
 }

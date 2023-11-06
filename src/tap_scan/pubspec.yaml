@@ -39,6 +39,7 @@ dependencies:
   dropdown_button2: ^2.3.9
   percent_indicator: ^4.0.1
   page_transition: ^2.1.0
+  flutter_easyloading: ^3.0.5
 
 dev_dependencies:
   flutter_test:
