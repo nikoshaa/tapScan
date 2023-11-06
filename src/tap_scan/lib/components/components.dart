@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -452,14 +453,16 @@ class ModalBottomSheetContent extends StatelessWidget {
               height: 30,
             ),
             MainButton(
-              function: () {
-                Navigator.push(
+              function: () async {
+              await availableCameras().then(
+                (value) => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ScanPage(),
+                    builder: (context) => CameraPage(cameras: value,),
                   ),
-                );
-              },
+                ),
+              );
+            },
               buttonText: "TAKE A PICTURE",
               iconData: Icons.camera_alt_outlined,
             ),
