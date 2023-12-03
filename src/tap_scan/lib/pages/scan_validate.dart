@@ -1,16 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/layouts/main_layout_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
 import 'package:tap_scan/pages/scan_result.dart';
+import 'package:tap_scan/providers/ktp_provider.dart';
 
 class ScanValidate extends StatelessWidget {
-  const ScanValidate({super.key});
+  const ScanValidate({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final ktpProvider = Provider.of<KtpProvider>(context);
     goToMain() {
       Navigator.of(context).push(
         PageTransition(
@@ -30,38 +35,38 @@ class ScanValidate extends StatelessWidget {
           kIsWeb
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: Image.asset("images/ktp.png"),
+                  child: Image.asset("images/${ktpProvider.ktpScan.foto}"),
                 )
-              : Image.asset("assets/images/ktp.png"),
+              : Image.asset("assets/images/${ktpProvider.ktpScan.foto}"),
           const SizedBox(
             height: 20,
           ),
-          const TextValidate(
-            text: "7312042510720002",
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          const TextValidate(
-            text: "ABDURRAUF, S.Pd, M.Pd",
+          TextValidate(
+            text: ktpProvider.ktpScan.nik,
           ),
           const SizedBox(
             height: 20,
           ),
-          const TextValidate(
-            text: "CELLENGENGE, 25-10-1972",
+          TextValidate(
+            text: ktpProvider.ktpScan.nama,
           ),
           const SizedBox(
             height: 20,
           ),
-          const TextValidate(
-            text: "LAKI-LAKI",
+          TextValidate(
+            text: ktpProvider.ktpScan.tempatTanggalLahir,
           ),
           const SizedBox(
             height: 20,
           ),
-          const TextValidate(
-            text: "JL. MERDEKA NO 43",
+          TextValidate(
+            text: ktpProvider.ktpScan.jenisKelamin,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          TextValidate(
+            text: ktpProvider.ktpScan.alamat,
           ),
           const SizedBox(
             height: 20,

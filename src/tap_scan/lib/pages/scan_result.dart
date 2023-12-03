@@ -1,12 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tap_scan/layouts/main_layout_page.dart';
+import 'package:tap_scan/models/ktp.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
+import 'package:tap_scan/providers/ktp_provider.dart';
 
 class ScanResult extends StatelessWidget {
   const ScanResult({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final ktpProvider = Provider.of<KtpProvider>(context);
+
+    final KTP ktpInitExample = KTP(
+      provinsi: "PROVINSI SULAWESI SELATAN",
+      kabupaten: "KABUPATEN SOPPENG",
+      rtRw: "01/01",
+      kelDesa: "CELLENGENGE",
+      kecamatan: "BILA",
+      berlakuHingga: "SEUMUR HIDUP",
+      nama: "ABDURRUSDI, S.Pd, M.Pd",
+      tempatTanggalLahir: "CELLENGENGE, 25-10-1972",
+      jenisKelamin: "LAKI-LAKI",
+      agama: "ISLAM",
+      alamat: "BILA",
+      kewarganegaraan: "WNI",
+      pekerjaan: "PEGAWAI NEGERI SIPIL (PNS)",
+      golonganDarah: "O",
+      statusPerkawinan: "KAWIN",
+      nik: "7312042510720002",
+      foto: "ktp.png",
+    );
+
     goToMain() {
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -15,41 +40,52 @@ class ScanResult extends StatelessWidget {
       );
     }
 
+    ktpProvider.UpdateKTP(ktpInitExample);
+
     return MainLayoutPage(
       useFixedBottomBar: true,
       leftIconFunction: goToMain,
       rightIconFunction: () {},
       widget: Container(
-        child: const Column(
+        child: Column(
           children: [
-            Text(
+            const Text(
               "PROVINSI SULAWESI SELATAN",
               style: TextStyle(
                 color: Color.fromRGBO(0, 198, 232, 1),
                 fontSize: 18,
               ),
             ),
-            Text(
+            const Text(
               "KABUPATEN SOPPENG",
               style: TextStyle(
                 color: Color.fromRGBO(0, 198, 232, 1),
                 fontSize: 18,
               ),
             ),
-            SizedBox(height: 20),
-            KtpData(label: "NIK", text: "7312042510720002"),
-            KtpData(label: "Nama", text: "ABDURRAUF, S.Pd, M.Pd"),
-            KtpData(label: "Tempat/Tgl Lahir", text: "CELLENGENGE, 25-10-1972"),
-            KtpData(label: "Jenis Kelamin", text: "LAKI-LAKI"),
-            KtpData(label: "RT/RW", text: "001/004"),
-            KtpData(label: "Kel/Desa", text: "BILA"),
-            KtpData(label: "Kecamatan", text: "LALABATA"),
-            KtpData(label: "Agama", text: "ISLAM"),
-            KtpData(label: "Status Perkawinan", text: "KAWIN"),
-            KtpData(label: "Pekerjaan", text: "PEGAWAI NEGERI SIPIL (PNS)"),
-            KtpData(label: "Kewarganegaraan", text: "WNI"),
-            KtpData(label: "Berlaku Hingga", text: "SEUMUR HIDUP"),
-            PlaceAndTime(),
+            const SizedBox(height: 20),
+            KtpData(label: "NIK", text: ktpProvider.ktpScan.nik),
+            KtpData(label: "Nama", text: ktpProvider.ktpScan.nama),
+            KtpData(
+                label: "Tempat/Tgl Lahir",
+                text: ktpProvider.ktpScan.tempatTanggalLahir),
+            KtpData(
+                label: "Jenis Kelamin", text: ktpProvider.ktpScan.jenisKelamin),
+            KtpData(label: "RT/RW", text: ktpProvider.ktpScan.rtRw),
+            KtpData(label: "Kel/Desa", text: ktpProvider.ktpScan.kelDesa),
+            KtpData(label: "Kecamatan", text: ktpProvider.ktpScan.kecamatan),
+            KtpData(label: "Agama", text: ktpProvider.ktpScan.agama),
+            KtpData(
+                label: "Status Perkawinan",
+                text: ktpProvider.ktpScan.statusPerkawinan),
+            KtpData(label: "Pekerjaan", text: ktpProvider.ktpScan.pekerjaan),
+            KtpData(
+                label: "Kewarganegaraan",
+                text: ktpProvider.ktpScan.kewarganegaraan),
+            KtpData(
+                label: "Berlaku Hingga",
+                text: ktpProvider.ktpScan.berlakuHingga),
+            const PlaceAndTime(),
           ],
         ),
       ),

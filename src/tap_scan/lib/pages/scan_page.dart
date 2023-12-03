@@ -1,5 +1,4 @@
 import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:tap_scan/components/components.dart';
@@ -65,10 +64,7 @@ class _CameraPageState extends State<CameraPage> {
             ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               child: SizedBox(
-                height: 200,
-                width: 300,
-                child: CameraPreview(controller)
-              ),
+                  height: 200, width: 300, child: CameraPreview(controller)),
             ),
             const SizedBox(
               height: 30,

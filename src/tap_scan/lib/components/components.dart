@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:tap_scan/models/ktp.dart';
 import 'package:tap_scan/pages/documents_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
 import 'package:tap_scan/pages/pdf_page.dart';
@@ -285,7 +286,8 @@ goToPdf(context) {
 }
 
 class KtpCard extends StatelessWidget {
-  const KtpCard({super.key});
+  final KTP ktp;
+  const KtpCard({super.key, required this.ktp});
 
   @override
   Widget build(BuildContext context) {
@@ -300,13 +302,13 @@ class KtpCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.asset(
-              kIsWeb ? 'images/ktp.png' : 'assets/images/ktp.png',
+              kIsWeb ? 'images/${ktp.foto}' : 'assets/images/${ktp.foto}',
               height: 50,
             ),
-            const Column(
+            Column(
               children: [
-                Text("ID Card 1"),
-                Icon(
+                Text(ktp.nama),
+                const Icon(
                   Icons.check_box_rounded,
                   color: Color.fromRGBO(204, 255, 210, 1),
                 )
@@ -454,15 +456,17 @@ class ModalBottomSheetContent extends StatelessWidget {
             ),
             MainButton(
               function: () async {
-              await availableCameras().then(
-                (value) => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CameraPage(cameras: value,),
+                await availableCameras().then(
+                  (value) => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CameraPage(
+                        cameras: value,
+                      ),
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
               buttonText: "TAKE A PICTURE",
               iconData: Icons.camera_alt_outlined,
             ),

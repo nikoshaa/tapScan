@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:provider/provider.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/pages/welcome_page.dart';
+import 'package:tap_scan/providers/ktp_provider.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -24,13 +26,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'tapScan',
-      theme: ThemeData(
-        fontFamily: "Poppins",
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<KtpProvider>(create: (_) => KtpProvider())
+      ],
+      child: MaterialApp(
+        title: 'tapScan',
+        theme: ThemeData(
+          fontFamily: "Poppins",
+        ),
+        home: const WelcomePage(),
+        builder: EasyLoading.init(),
       ),
-      home: const WelcomePage(),
-      builder: EasyLoading.init(),
     );
   }
 }
