@@ -1,12 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/pages/onboard_pages.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tap_scan/pages/my_scans_page.dart';
 
 class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key});
+  const WelcomePage({Key? key});
 
   @override
   Widget build(BuildContext context) {
+    User? user = Provider.of<User?>(context);
+
+    // Check if the user is already authenticated
+    if (user != null) {
+      // User is already logged in, navigate to MyScansPage
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const MyScansPage(),
+          ),
+        );
+      });
+    }
+
     return SafeArea(
       child: Material(
         child: InkWell(
