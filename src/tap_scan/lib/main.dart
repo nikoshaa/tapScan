@@ -20,6 +20,8 @@ void main() {
   configLoading();
 }
 
+// Lupa format pesan commit
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
