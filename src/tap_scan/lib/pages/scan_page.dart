@@ -71,26 +71,25 @@ class _CameraPageState extends State<CameraPage> {
       title: "Verification",
       cleanLayout: true,
       widget: Container(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            child: controller.value.isInitialized
-                ? SizedBox(
-                    height: 200,
-                    width: 300,
-                    child: CameraPreview(controller),
-                  )
-                : const CircularProgressIndicator(),
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              child: controller.value.isInitialized
+                  ? SizedBox(
+                      height: 200,
+                      width: 300,
+                      child: CameraPreview(controller),
+                    )
+                  : const CircularProgressIndicator(),
             ),
             const SizedBox(
               height: 30,
             ),
             MainButton(
-              function: () {},
-              buttonText: "Verification",
-              onPressed: () => {
+              function: () {
+                print("Takin picture");
                 takePicture().then((XFile? file) {
                   if (mounted) {
                     setState(() {
@@ -106,8 +105,10 @@ class _CameraPageState extends State<CameraPage> {
                       );
                     }
                   }
-                })
+                });
               },
+              buttonText: "Verification",
+              onPressed: () {},
             ),
             const SizedBox(
               height: 30,
@@ -121,8 +122,8 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   Future<XFile?> takePicture() async {
-    final CameraController? cameraController = controller;
-    if (cameraController == null || !cameraController.value.isInitialized) {
+    final CameraController cameraController = controller;
+    if (!cameraController.value.isInitialized) {
       print("Camera is not initialized");
       return null;
     }
