@@ -19,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   Timer? _timer;
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool isHovered = false;
 
   @override
   void initState() {
@@ -134,21 +135,36 @@ class _LoginPageState extends State<LoginPage> {
                                   "No account?",
                                   style: TextStyle(color: Colors.white),
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
+                                MouseRegion(
+                      onEnter: (_) {
+                        // Ubah warna teks menjadi oranye
+                        setState(() {
+                          isHovered = true;
+                        });
+                      },
+                      onExit: (_) {
+                        // Kembalikan warna teks ke warna semula
+                        setState(() {
+                          isHovered = false;
+                        });
+                      },
+                      child: GestureDetector(
+                                    onTap: () {
+                                      // Aksi yang diambil saat teks diklik
+                          Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
                                             const RegisterPage(),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      "Create Account",
+                                      style: TextStyle(
+                                        color: isHovered ? Colors.orange : Colors.white,
+                                        decoration: TextDecoration.underline,
                                       ),
-                                    );
-                                  },
-                                  child: const Text(
-                                    "Create Account",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      decoration: TextDecoration.underline,
-                                    ),
+                        ),
                                   ),
                                 ),
                               ],

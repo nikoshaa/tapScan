@@ -111,33 +111,67 @@ class _RegisterPageState extends State<RegisterPage> {
                 function: () {},
                 text: "Register With Google",
               ),
-              Center(
-                child: Column(children: [
-                  const Text(
-                    "Already have account?",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(
-                        color: Colors.white,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ]),
-              )
+              const ToLogin()
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ToLogin extends StatefulWidget {
+  const ToLogin({
+    super.key,
+  });
+
+  @override
+  State<ToLogin> createState() => _ToLoginState();
+}
+
+class _ToLoginState extends State<ToLogin> {
+  bool isHovered = false;
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        children: [
+          const Text(
+            "Already have an account?",
+            style: TextStyle(color: Colors.white),
+          ),
+          MouseRegion(
+            onEnter: (_) {
+              // Ubah warna teks menjadi oranye
+              setState(() {
+                isHovered = true;
+              });
+            },
+            onExit: (_) {
+              // Kembalikan warna teks ke warna semula
+              setState(() {
+                isHovered = false;
+              });
+            },
+            child: GestureDetector(
+              onTap: () {
+                // Aksi yang diambil saat teks diklik
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                );
+              },
+              child: Text(
+                "Login",
+                style: TextStyle(
+                  color: isHovered ? Colors.orange : Colors.white,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

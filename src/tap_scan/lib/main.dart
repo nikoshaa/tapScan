@@ -35,6 +35,8 @@ Future main() async {
   configLoading();
 }
 
+// Lupa format pesan commit
+
 class MyApp extends StatelessWidget {
   final User? user;
 
