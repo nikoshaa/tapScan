@@ -1,8 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:tap_scan/models/ktp.dart';
@@ -441,6 +446,8 @@ class ModalBottomSheetContent extends StatelessWidget {
     super.key,
   });
 
+  get http => null;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -479,7 +486,30 @@ class ModalBottomSheetContent extends StatelessWidget {
               height: 30,
             ),
             MainButton(
-              function: () {},
+              function: () async {
+                // Pick an image from the device's gallery
+                final pickedFile =
+                    await ImagePicker().pickImage(source: ImageSource.gallery);
+                if (pickedFile != null) {
+                  // Upload the image file to your server or cloud storage
+                  final bytes = await pickedFile.readAsBytes();
+                  final String base64Image = base64Encode(bytes);
+
+                  // Send the base64 encoded image to your server
+                  final response = await http.post(
+                    Uri.parse('https://your-server.com/upload-image'),
+                    body: {'image': base64Image},
+                  );
+
+                  if (response.statusCode == 200) {
+                    // Image uploaded successfully
+                    print('Image uploaded successfully');
+                  } else {
+                    // Image upload failed
+                    print('Image upload failed');
+                  }
+                }
+              },
               buttonText: "GALLERY",
               iconData: Icons.photo,
               horizontalPadding: 70,
@@ -488,7 +518,29 @@ class ModalBottomSheetContent extends StatelessWidget {
               height: 30,
             ),
             MainButton(
-              function: () {},
+              function: () async {
+                // // Pick a file from the device's storage;
+                // var pickedFiles = await FilePicker.pickFiles();
+
+                // if (pickedFiles != null && pickedFiles.isNotEmpty) {
+                //   // Read the selected file's contents
+                //   final file = pickedFiles.first;
+                //   final bytes = await file.readAsBytes();
+
+                //   // Process the file contents as needed (e.g., upload to a server)
+                //   // Perform file upload or processing here
+                // }
+
+                FilePickerResult? result =
+                    await FilePicker.platform.pickFiles(allowMultiple: true);
+
+                if (result != null) {
+                  List<File> files =
+                      result.paths.map((path) => File(path!)).toList();
+                } else {
+                  // User canceled the picker
+                }
+              },
               buttonText: "IMPORT PDF",
               iconData: Icons.picture_as_pdf_outlined,
               horizontalPadding: 55,
