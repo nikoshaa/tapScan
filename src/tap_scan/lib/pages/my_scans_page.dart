@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/layouts/main_layout_page.dart';
 import 'package:tap_scan/models/ktp.dart';
 
 class MyScansPage extends StatelessWidget {
-  const MyScansPage({super.key});
+  const MyScansPage({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,30 +29,39 @@ class MyScansPage extends StatelessWidget {
       foto: "ktp.png",
     );
 
-    return MainLayoutPage(
-      widget: Column(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          KtpCard(
-            ktp: ktp,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          KtpCard(
-            ktp: ktp,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          KtpCard(
-            ktp: ktp,
-          ),
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        // Saat tombol "Back" perangkat ditekan
+        // Tampilkan dialog atau lakukan sesuatu jika diperlukan
+        // Gunakan SystemNavigator.pop() untuk keluar dari aplikasi
+        SystemNavigator.pop();
+        return true; // Setel ke false jika Anda ingin mencegah aksi kembali
+      },
+      child: MainLayoutPage(
+        widget: Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            KtpCard(
+              ktp: ktp,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            KtpCard(
+              ktp: ktp,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            KtpCard(
+              ktp: ktp,
+            ),
+          ],
+        ),
+        activeIndex: 0,
       ),
-      activeIndex: 0,
     );
   }
 }

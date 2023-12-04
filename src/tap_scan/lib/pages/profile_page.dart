@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tap_scan/components/components.dart';
+import 'package:tap_scan/pages/login_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -57,32 +59,49 @@ class ProfilePage extends StatelessWidget {
 
 class ProfileDatas extends StatelessWidget {
   const ProfileDatas({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
-        ProfileData(
+        const ProfileData(
           icon: Icons.email,
           label: "Email",
         ),
-        ProfileData(
+        const ProfileData(
           icon: Icons.person,
           label: "Name",
         ),
-        ProfileData(
+        const ProfileData(
           icon: Icons.phone,
           label: "No Telp",
+        ),
+        ElevatedButton(
+          onPressed: () {
+            // Add your logout logic here
+            // For example, sign out from authentication
+            FirebaseAuth.instance.signOut();
+
+            // Navigate to MyScansPage after logout
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => const LoginPage(),
+              ),
+              (route) => false,
+            );
+          },
+          child: const Text("Logout"),
         ),
       ],
     );
   }
 }
+
 
 class BackButton extends StatelessWidget {
   const BackButton({

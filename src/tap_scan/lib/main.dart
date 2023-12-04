@@ -4,28 +4,44 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/pages/welcome_page.dart';
+import 'package:tap_scan/pages/my_scans_page.dart'; // Import the MyScansPage
 import 'package:tap_scan/providers/ktp_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-void main() {
+Future main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-// Wait for 3 seconds.
+  // Wait for 3 seconds.
   Future.delayed(const Duration(seconds: 3), () {
     // whenever your initialization is completed, remove the splash screen:
     FlutterNativeSplash.remove();
   });
 
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // Check if the user is already authenticated
+  User? user = FirebaseAuth.instance.currentUser;
+
+  runApp(
+    MyApp(user: user), // Pass the user to MyApp
+  );
+
   configLoading();
 }
 
 // Lupa format pesan commit
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final User? user;
 
-  // This widget is the root of your application.
+  const MyApp({Key? key, required this.user}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -37,7 +53,12 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: "Poppins",
         ),
-        home: const WelcomePage(),
+        // Use a ternary operator to determine the initial route based on the user's authentication status
+        initialRoute: user != null ? '/myScans' : '/', 
+        routes: {
+          '/': (context) => const WelcomePage(),
+          '/myScans': (context) => const MyScansPage(),
+        },
         builder: EasyLoading.init(),
       ),
     );

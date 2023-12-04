@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/pages/login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class RegisterPage extends StatelessWidget {
+
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     TextEditingController usernameController = TextEditingController();
@@ -59,12 +67,33 @@ class RegisterPage extends StatelessWidget {
                 height: 40,
               ),
               MainButton(
-                function: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
-                    ),
-                  );
+                function: () async {
+                  try {
+                    UserCredential userCredential = await FirebaseAuth.instance
+                        .createUserWithEmailAndPassword(
+                      email: emailController.text.trim(),
+                      password: passwordController.text.trim(),
+                    );
+
+                    // Store additional user information in Firestore
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(userCredential.user!.uid)
+                        .set({
+                      'username': usernameController.text.trim(),
+                      'email': emailController.text.trim(),
+                      'phoneNumber': phoneNumberController.text.trim(),
+                    });
+
+                    // Navigate to the login page after successful registration
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ),
+                    );
+                  } catch (e) {
+                    print('Registration failed: $e');
+                  }
                 },
                 buttonText: "Register",
               ),
@@ -147,3 +176,11 @@ class _ToLoginState extends State<ToLogin> {
     );
   }
 }
+
+
+// class RegisterPage extends StatelessWidget {
+//   const RegisterPage({super.key});
+
+//   @override
+  
+// }
