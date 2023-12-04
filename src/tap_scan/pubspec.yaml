@@ -42,7 +42,11 @@ dependencies:
   flutter_easyloading: ^3.0.5
   camera: ^0.9.4+1
   provider: ^6.1.1
+  firebase_core: ^2.24.0
+  firebase_auth: ^4.15.0
+  cloud_firestore: ^4.13.3
   image_picker: ^0.8.4+3
+  file_picker: ^6.1.1
 
 dev_dependencies:
   flutter_test:
