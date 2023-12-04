@@ -18,6 +18,8 @@ class MainButton extends StatelessWidget {
   final Function() function;
   final double horizontalPadding;
   final IconData? iconData;
+  final void Function()? onPressed;
+
   const MainButton({
     super.key,
     this.buttonText = "Button Text",
@@ -25,6 +27,7 @@ class MainButton extends StatelessWidget {
     this.horizontalPadding = 40.0,
     this.iconData,
     this.color = const Color.fromRGBO(255, 240, 44, 1),
+    this.onPressed,
   });
 
   @override
@@ -456,16 +459,18 @@ class ModalBottomSheetContent extends StatelessWidget {
             ),
             MainButton(
               function: () async {
-                await availableCameras().then(
-                  (value) => Navigator.push(
+                final cameras = await availableCameras();
+                final firstCamera = cameras.first;
+                if (context.mounted) {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => CameraPage(
-                        cameras: value,
+                        cameras: cameras,
                       ),
                     ),
-                  ),
-                );
+                  );
+                }
               },
               buttonText: "TAKE A PICTURE",
               iconData: Icons.camera_alt_outlined,
