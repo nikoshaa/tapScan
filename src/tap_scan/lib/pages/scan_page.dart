@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/layouts/main_layout_page.dart';
@@ -102,7 +105,7 @@ class _CameraPageState extends State<CameraPage> {
             ),
             MainButton(
               function: () {
-                print("Takin picture");
+                print("Take a picture");
                 takePicture().then((XFile? file) {
                   if (mounted) {
                     setState(() {
@@ -161,14 +164,37 @@ class SecondaryButton extends StatelessWidget {
     super.key,
   });
 
+  get http => null;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 200, // Set the width
       height: 40, // Set the height
       child: OutlinedButton(
-        onPressed: () {
-          // Add your button's onPressed action here
+        onPressed: () async {
+          // Pick an image from the device's gallery
+          final pickedFile =
+              await ImagePicker().pickImage(source: ImageSource.gallery);
+          if (pickedFile != null) {
+            // Upload the image file to your server or cloud storage
+            final bytes = await pickedFile.readAsBytes();
+            final String base64Image = base64Encode(bytes);
+
+            // Send the base64 encoded image to your server
+            final response = await http.post(
+              Uri.parse('https://your-server.com/upload-image'),
+              body: {'image': base64Image},
+            );
+
+            if (response.statusCode == 200) {
+              // Image uploaded successfully
+              print('Image uploaded successfully');
+            } else {
+              // Image upload failed
+              print('Image upload failed');
+            }
+          }
         },
         style: OutlinedButton.styleFrom(
           foregroundColor: const Color.fromRGBO(0, 198, 232, 1),
@@ -186,39 +212,3 @@ class SecondaryButton extends StatelessWidget {
     );
   }
 }
-
-
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: Center(
-//             child: SizedBox(
-//               height: 400,
-//               width: 400,
-//               child: CameraPreview(controller),
-//             ),
-//           ),
-//         ),
-//         Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: ElevatedButton(
-//             onPressed: () async {
-//               pictureFile = await controller.takePicture();
-//               setState(() {});
-//             },
-//             child: const Text('Capture Image'),
-//           ),
-//         ),
-//         if (pictureFile != null)
-//           Image.network(
-//             pictureFile!.path,
-//             height: 200,
-//           )
-//           //Android/iOS
-//           // Image.file(File(pictureFile!.path)))
-//       ],
-//     );
-//   }
-// }
