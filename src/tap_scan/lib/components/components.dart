@@ -459,16 +459,18 @@ class ModalBottomSheetContent extends StatelessWidget {
             ),
             MainButton(
               function: () async {
-                await availableCameras().then(
-                  (value) => Navigator.push(
+                final cameras = await availableCameras();
+                final firstCamera = cameras.first;
+                if (context.mounted) {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => CameraPage(
-                        cameras: value,
+                        cameras: cameras,
                       ),
                     ),
-                  ),
-                );
+                  );
+                }
               },
               buttonText: "TAKE A PICTURE",
               iconData: Icons.camera_alt_outlined,
@@ -568,5 +570,3 @@ class CustomAnimation extends EasyLoadingAnimation {
     );
   }
 }
-
-

@@ -33,14 +33,27 @@ class _CameraPageState extends State<CameraPage> {
 
     controller = CameraController(
       cameras[0],
-      ResolutionPreset.max,
+      ResolutionPreset.medium,
     );
 
     try {
-      await controller.initialize();
-      if (mounted) {
+      controller.initialize().then((_) {
+        if (!mounted) {
+          return;
+        }
         setState(() {});
-      }
+      }).catchError((Object e) {
+        if (e is CameraException) {
+          switch (e.code) {
+            case 'CameraAccessDenied':
+              // Handle access errors here.
+              break;
+            default:
+              // Handle other errors here.
+              break;
+          }
+        }
+      });
     } catch (e) {
       print("Error initializing camera: $e");
     }
@@ -168,7 +181,7 @@ class SecondaryButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(30.0), // Border radius
           ),
         ),
-        child: const Text('Uplaod Image'),
+        child: const Text('Upload Image'),
       ),
     );
   }
