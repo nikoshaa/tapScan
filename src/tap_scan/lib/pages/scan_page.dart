@@ -21,16 +21,29 @@ class _CameraPageState extends State<CameraPage> {
   @override
   void initState() {
     super.initState();
+    initializeCamera();
+  }
+
+  Future<void> initializeCamera() async {
+    final cameras = widget.cameras;
+    if (cameras == null || cameras.isEmpty) {
+      print("No cameras available");
+      return;
+    }
+
     controller = CameraController(
-      widget.cameras![0],
+      cameras[0],
       ResolutionPreset.max,
     );
-    controller.initialize().then((_) {
-      if (!mounted) {
-        return;
+
+    try {
+      await controller.initialize();
+      if (mounted) {
+        setState(() {});
       }
-      setState(() {});
-    });
+    } catch (e) {
+      print("Error initializing camera: $e");
+    }
   }
 
   @override
@@ -58,28 +71,43 @@ class _CameraPageState extends State<CameraPage> {
       title: "Verification",
       cleanLayout: true,
       widget: Container(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              child: SizedBox(
-                  height: 200, width: 300, child: CameraPreview(controller)),
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            child: controller.value.isInitialized
+                ? SizedBox(
+                    height: 200,
+                    width: 300,
+                    child: CameraPreview(controller),
+                  )
+                : const CircularProgressIndicator(),
             ),
             const SizedBox(
               height: 30,
             ),
             MainButton(
-              function: () {
-                Navigator.push(
-                  context,
-                  PageTransition(
-                      child: const Progress(),
-                      type: PageTransitionType.rightToLeftJoined,
-                      childCurrent: const CameraPage()),
-                );
-              },
+              function: () {},
               buttonText: "Verification",
+              onPressed: () => {
+                takePicture().then((XFile? file) {
+                  if (mounted) {
+                    setState(() {
+                      pictureFile = file;
+                    });
+                    if (file != null) {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                            child: const Progress(),
+                            type: PageTransitionType.rightToLeftJoined,
+                            childCurrent: const CameraPage()),
+                      );
+                    }
+                  }
+                })
+              },
             ),
             const SizedBox(
               height: 30,
@@ -90,6 +118,27 @@ class _CameraPageState extends State<CameraPage> {
       ),
       whiteBoxTopPadding: 10,
     );
+  }
+
+  Future<XFile?> takePicture() async {
+    final CameraController? cameraController = controller;
+    if (cameraController == null || !cameraController.value.isInitialized) {
+      print("Camera is not initialized");
+      return null;
+    }
+
+    if (cameraController.value.isTakingPicture) {
+      print("A capture is already pending, do nothing");
+      return null;
+    }
+
+    try {
+      final XFile file = await cameraController.takePicture();
+      return file;
+    } on CameraException catch (e) {
+      print("Error taking picture: $e");
+      return null;
+    }
   }
 }
 
@@ -123,6 +172,8 @@ class SecondaryButton extends StatelessWidget {
     );
   }
 }
+
+
 //   Widget build(BuildContext context) {
 //     return Column(
 //       children: [
