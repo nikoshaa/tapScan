@@ -4,7 +4,6 @@ import 'package:tap_scan/pages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
@@ -84,6 +83,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       'email': emailController.text.trim(),
                       'phoneNumber': phoneNumberController.text.trim(),
                     });
+
+                    await FirebaseAuth.instance.signOut();
 
                     // Navigate to the login page after successful registration
                     Navigator.of(context).push(
