@@ -424,7 +424,7 @@ class MainFloatingActionButton extends StatelessWidget {
   const MainFloatingActionButton({super.key});
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton.extended(
+    return FloatingActionButton(
       backgroundColor: const Color.fromRGBO(255, 240, 44, 1),
       onPressed: () {
         showModalBottomSheet<void>(
@@ -434,8 +434,8 @@ class MainFloatingActionButton extends StatelessWidget {
           },
         );
       },
-      label: const Text(''),
-      icon: const Icon(Icons.camera),
+      // label: const Text(''),
+      child: Center(child: const Icon(Icons.camera)),
       elevation: 4.0,
     );
   }
