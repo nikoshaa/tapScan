@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/layouts/main_layout_page.dart';
 
@@ -13,15 +14,21 @@ class DocumentsPage extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          IconCard(iconData: Icons.document_scanner),
+          IconCard(
+              icon: FaIcon(
+            FontAwesomeIcons.fileWord,
+            color: Colors.white,
+          )),
           SizedBox(
             height: 20,
           ),
-          IconCard(iconData: Icons.document_scanner),
+          IconCard(
+              icon: FaIcon(FontAwesomeIcons.fileWord, color: Colors.white)),
           SizedBox(
             height: 20,
           ),
-          IconCard(iconData: Icons.document_scanner),
+          IconCard(
+              icon: FaIcon(FontAwesomeIcons.fileWord, color: Colors.white)),
         ],
       ),
       activeIndex: 1,

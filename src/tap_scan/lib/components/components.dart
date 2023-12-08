@@ -330,8 +330,8 @@ class KtpCard extends StatelessWidget {
 }
 
 class IconCard extends StatelessWidget {
-  final IconData iconData;
-  const IconCard({super.key, required this.iconData});
+  final Widget icon;
+  const IconCard({super.key, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -348,11 +348,7 @@ class IconCard extends StatelessWidget {
             const SizedBox(
               width: 20,
             ),
-            Icon(
-              iconData,
-              color: Colors.white,
-              size: 40,
-            ),
+            icon,
             const SizedBox(
               width: 20,
             ),
