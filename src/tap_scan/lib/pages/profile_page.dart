@@ -103,29 +103,9 @@ class ProfileDatas extends StatelessWidget {
           icon: Icons.phone,
           label: phoneNumber,
         ),
-        ElevatedButton(
-          onPressed: () {
-            // Add your logout logic here
-            // For example, sign out from authentication
-            FirebaseAuth.instance.signOut();
-
-            // Navigate to MyScansPage after logout
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => const LoginPage(),
-              ),
-              (route) => false,
-            );
-          },
-          child: const Text("Logout"),
-        ),
-          ],
-        );
-      },
     );
   }
 }
-
 
 class BackButton extends StatelessWidget {
   const BackButton({

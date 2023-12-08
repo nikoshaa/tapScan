@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tap_scan/pages/login_page.dart';
 import 'package:tap_scan/components/components.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MainLayoutPage extends StatelessWidget {
   final Widget widget;
@@ -126,9 +128,62 @@ class WhiteBox extends StatelessWidget {
                         fontWeight: FontWeight.w700, color: Colors.white),
                   ),
                 ),
-                Icon(
-                  rightIcon,
-                  color: Colors.white,
+                InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Positioned(
+                          right: 5.0,
+                          top: 5.0,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: AlertDialog(
+                                  actions: [
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          icon: Icon(Icons.logout),
+                                          onPressed: () {
+                                            // Tambahkan logika logout di sini
+                                            FirebaseAuth.instance.signOut();
+
+                                            // Navigate to MyScansPage after logout
+                                            Navigator.of(context)
+                                                .pushAndRemoveUntil(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const LoginPage(),
+                                              ),
+                                              (route) => false,
+                                            );
+                                          },
+                                        ),
+                                        Text(
+                                          'Logout',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16.0,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Icon(
+                    rightIcon,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),

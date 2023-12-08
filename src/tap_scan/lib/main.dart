@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
           fontFamily: "Poppins",
         ),
         // Use a ternary operator to determine the initial route based on the user's authentication status
-        initialRoute: user != null ? '/myScans' : '/', 
+        initialRoute: user != null ? '/myScans' : '/',
         routes: {
           '/': (context) => const WelcomePage(),
           '/myScans': (context) => const MyScansPage(),
