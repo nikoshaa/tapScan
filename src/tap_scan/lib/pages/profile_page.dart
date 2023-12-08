@@ -14,13 +14,13 @@ class ProfilePage extends StatelessWidget {
       child: Scaffold(
           body: Container(
             padding: const EdgeInsets.all(20),
-            child: const Column(
+            child: Column(
               children: [
                 SizedBox(
                   height: 25,
                 ),
                 Text(
-                  "Edit Profile",
+                  "Profile",
                   style: TextStyle(
                     color: Color.fromRGBO(0, 198, 232, 1),
                     fontWeight: FontWeight.w700,
@@ -86,23 +86,26 @@ class ProfileDatas extends StatelessWidget {
         String name = snapshot.data!['username'];
         String phoneNumber = snapshot.data!['phoneNumber'];
 
-    return Column(
-      children: [
-        const SizedBox(
-          height: 20,
-        ),
-        ProfileData(
-          icon: Icons.email,
-          label: email,
-        ),
-        ProfileData(
-          icon: Icons.person,
-          label: name,
-        ),
-        ProfileData(
-          icon: Icons.phone,
-          label: phoneNumber,
-        ),
+        return Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            ProfileData(
+              icon: Icons.email,
+              label: email,
+            ),
+            ProfileData(
+              icon: Icons.person,
+              label: name,
+            ),
+            ProfileData(
+              icon: Icons.phone,
+              label: phoneNumber,
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -47,6 +47,7 @@ dependencies:
   cloud_firestore: ^4.13.3
   image_picker: ^0.8.4+3
   file_picker: ^6.1.1
+  font_awesome_flutter: ^10.6.0
 
 dev_dependencies:
   flutter_test:

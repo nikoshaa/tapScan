@@ -330,8 +330,8 @@ class KtpCard extends StatelessWidget {
 }
 
 class IconCard extends StatelessWidget {
-  final IconData iconData;
-  const IconCard({super.key, required this.iconData});
+  final Widget icon;
+  const IconCard({super.key, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -348,11 +348,7 @@ class IconCard extends StatelessWidget {
             const SizedBox(
               width: 20,
             ),
-            Icon(
-              iconData,
-              color: Colors.white,
-              size: 40,
-            ),
+            icon,
             const SizedBox(
               width: 20,
             ),
@@ -424,7 +420,7 @@ class MainFloatingActionButton extends StatelessWidget {
   const MainFloatingActionButton({super.key});
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton.extended(
+    return FloatingActionButton(
       backgroundColor: const Color.fromRGBO(255, 240, 44, 1),
       onPressed: () {
         showModalBottomSheet<void>(
@@ -434,8 +430,8 @@ class MainFloatingActionButton extends StatelessWidget {
           },
         );
       },
-      label: const Text(''),
-      icon: const Icon(Icons.camera),
+      // label: const Text(''),
+      child: Center(child: const Icon(Icons.camera)),
       elevation: 4.0,
     );
   }
