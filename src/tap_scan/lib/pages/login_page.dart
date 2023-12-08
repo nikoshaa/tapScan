@@ -73,6 +73,8 @@ class _LoginPageState extends State<LoginPage> {
                   if (snapshot.connectionState == ConnectionState.active) {
                     User? user = snapshot.data;
 
+                    print(user);
+
                     if (user == null) {
                       // User is not logged in, show login UI
                       return Column(
@@ -136,35 +138,37 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 MouseRegion(
-                      onEnter: (_) {
-                        // Ubah warna teks menjadi oranye
-                        setState(() {
-                          isHovered = true;
-                        });
-                      },
-                      onExit: (_) {
-                        // Kembalikan warna teks ke warna semula
-                        setState(() {
-                          isHovered = false;
-                        });
-                      },
-                      child: GestureDetector(
+                                  onEnter: (_) {
+                                    // Ubah warna teks menjadi oranye
+                                    setState(() {
+                                      isHovered = true;
+                                    });
+                                  },
+                                  onExit: (_) {
+                                    // Kembalikan warna teks ke warna semula
+                                    setState(() {
+                                      isHovered = false;
+                                    });
+                                  },
+                                  child: GestureDetector(
                                     onTap: () {
                                       // Aksi yang diambil saat teks diklik
-                          Navigator.of(context).push(
+                                      Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                            const RegisterPage(),
+                                              const RegisterPage(),
                                         ),
                                       );
                                     },
                                     child: Text(
                                       "Create Account",
                                       style: TextStyle(
-                                        color: isHovered ? Colors.orange : Colors.white,
+                                        color: isHovered
+                                            ? Colors.orange
+                                            : Colors.white,
                                         decoration: TextDecoration.underline,
                                       ),
-                        ),
+                                    ),
                                   ),
                                 ),
                               ],

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tap_scan/components/components.dart';
@@ -64,24 +65,44 @@ class ProfileDatas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser!.uid)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator(); // Menampilkan indikator loading jika data belum tersedia
+        }
+
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+
+        // Mendapatkan data dari dokumen Firestore
+        String email = snapshot.data!['email'];
+        String name = snapshot.data!['username'];
+        String phoneNumber = snapshot.data!['phoneNumber'];
+
     return Column(
       children: [
         const SizedBox(
           height: 20,
         ),
-        const ProfileData(
+        ProfileData(
           icon: Icons.email,
-          label: "Email",
+          label: email,
         ),
-        const ProfileData(
+        ProfileData(
           icon: Icons.person,
-          label: "Name",
+          label: name,
         ),
-        const ProfileData(
+        ProfileData(
           icon: Icons.phone,
-          label: "No Telp",
+          label: phoneNumber,
         ),
-      ],
     );
   }
 }
