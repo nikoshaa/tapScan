@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:tap_scan/models/ktp.dart';
@@ -331,7 +331,16 @@ class KtpCard extends StatelessWidget {
 
 class IconCard extends StatelessWidget {
   final Widget icon;
-  const IconCard({super.key, required this.icon});
+  final String title;
+  final String date;
+
+  // Remove 'const' from the constructor
+  const IconCard({
+    required this.icon,
+    required this.title,
+    required this.date,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -352,16 +361,16 @@ class IconCard extends StatelessWidget {
             const SizedBox(
               width: 20,
             ),
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Sample Document",
-                  style: TextStyle(fontSize: 14, color: Colors.white),
+                  title,
+                  style: const TextStyle(fontSize: 14, color: Colors.white),
                 ),
                 Text(
-                  "25/20/2023",
-                  style: TextStyle(
+                  date,
+                  style: const TextStyle(
                       fontSize: 12, color: Color.fromRGBO(0, 94, 109, 1)),
                 ),
               ],
@@ -430,9 +439,9 @@ class MainFloatingActionButton extends StatelessWidget {
           },
         );
       },
-      // label: const Text(''),
-      child: Center(child: const Icon(Icons.camera)),
       elevation: 4.0,
+      // label: const Text(''),
+      child: const Center(child: Icon(Icons.camera)),
     );
   }
 }
