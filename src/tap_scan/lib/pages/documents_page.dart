@@ -8,27 +8,37 @@ class DocumentsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MainLayoutPage(
+    // Sample data, replace it with your actual data
+    final List<Map<String, String>> documents = [
+      {'title': 'Sample 1', 'date': '6/10/2023'},
+      {'title': 'Sample 2', 'date': '7/10/2023'},
+      {'title': 'Sample 3', 'date': '8/10/2023'},
+      // Add more data as needed
+    ];
+
+    List<Widget> iconCards = documents.map((document) {
+      return Column(
+        children: [
+          IconCard(
+            icon: const FaIcon(FontAwesomeIcons.fileWord, color: Colors.white),
+            title: document['title'] ?? '',
+            date: document['date'] ?? '',
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+        ],
+      );
+    }).toList();
+
+    return MainLayoutPage(
       widget: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          IconCard(
-              icon: FaIcon(
-            FontAwesomeIcons.fileWord,
-            color: Colors.white,
-          )),
-          SizedBox(
-            height: 20,
-          ),
-          IconCard(
-              icon: FaIcon(FontAwesomeIcons.fileWord, color: Colors.white)),
-          SizedBox(
-            height: 20,
-          ),
-          IconCard(
-              icon: FaIcon(FontAwesomeIcons.fileWord, color: Colors.white)),
+          // Use the list of IconCard widgets
+          ...iconCards,
         ],
       ),
       activeIndex: 1,
