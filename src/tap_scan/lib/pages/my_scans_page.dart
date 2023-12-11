@@ -18,11 +18,11 @@ class MyScansPage extends StatelessWidget {
     User? currentUser = FirebaseAuth.instance.currentUser;
 
     return FutureBuilder(
-      future:
-          ktpProvider.fetchKtps(currentUser!.uid), // Ganti dengan user_id yang sesuai
+      future: ktpProvider
+          .fetchKtps(currentUser!.uid), // Ganti dengan user_id yang sesuai
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {

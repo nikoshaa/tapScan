@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -122,7 +123,39 @@ class _LoginPageState extends State<LoginPage> {
                             height: 10,
                           ),
                           ContinueWithGoogleButton(
-                            function: () {},
+                            function: () async {
+                              // Try signing in with Google
+                              try {
+                                print('Signing in with Google');
+                                final GoogleSignInAccount? googleUser =
+                                    await GoogleSignIn().signIn();
+
+                                if (googleUser != null) {
+                                  // Perform sign in with Google account
+                                  final GoogleSignInAuthentication googleAuth =
+                                      await googleUser.authentication;
+                                  final credential =
+                                      GoogleAuthProvider.credential(
+                                    accessToken: googleAuth.accessToken,
+                                    idToken: googleAuth.idToken,
+                                  );
+
+                                  await FirebaseAuth.instance
+                                      .signInWithCredential(credential);
+
+                                  // Navigate to the home page or perform other actions after successful login
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => const MyScansPage(),
+                                    ),
+                                  );
+                                } else {
+                                  print('Google sign in cancelled.');
+                                }
+                              } catch (e) {
+                                print('Error signing in with Google: $e');
+                              }
+                            },
                             text: "Continue With Google",
                           ),
                           const SizedBox(
