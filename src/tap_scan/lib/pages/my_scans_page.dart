@@ -22,7 +22,6 @@ class MyScansPage extends StatelessWidget {
     return FutureBuilder(
       future: ktpProvider
           .fetchKtps(currentUser!.uid), // Ganti dengan user_id yang sesuai
-      // future: Future.error("test"),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
