@@ -15,9 +15,12 @@ class KtpProvider extends ChangeNotifier {
           .get();
 
       ktps = snapshot.docs.map((doc) => KTP.fromFirestore(doc)).toList();
+
+      print(ktps);
       notifyListeners();
     } catch (error) {
-      print('Error fetching KTPs: $error');
+      print(error);
+      print('Error fetching gest KTPs: $error');
     }
   }
 

@@ -309,13 +309,14 @@ class KtpCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.asset(
-              kIsWeb ? 'images/${ktp.foto}' : 'assets/images/${ktp.foto}',
-              height: 50,
-            ),
+            if (ktp.foto != null)
+              Image.network(
+                ktp.foto!,
+                height: 50,
+              ),
             Column(
               children: [
-                Text(ktp.nama),
+                Text(ktp.nama ?? '-'),
                 const Icon(
                   Icons.check_box_rounded,
                   color: Color.fromRGBO(204, 255, 210, 1),

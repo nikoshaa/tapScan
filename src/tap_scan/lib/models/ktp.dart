@@ -1,23 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class KTP {
-  String provinsi;
-  String kabupaten;
-  String rtRw;
-  String kelDesa;
-  String kecamatan;
-  String berlakuHingga;
-  String nama;
-  String tempatTanggalLahir;
-  String jenisKelamin;
-  String agama;
-  String alamat;
-  String kewarganegaraan;
-  String pekerjaan;
-  String golonganDarah;
-  String statusPerkawinan;
-  String nik;
-  String foto;
+  String? provinsi;
+  String? kabupaten;
+  String? rtRw;
+  String? kelDesa;
+  String? kecamatan;
+  String? berlakuHingga;
+  String? nama;
+  String? tempatTanggalLahir;
+  String? jenisKelamin;
+  String? agama;
+  String? alamat;
+  String? kewarganegaraan;
+  String? pekerjaan;
+  String? golonganDarah;
+  String? statusPerkawinan;
+  String? nik;
+  String? foto;
 
   KTP({
     required this.provinsi,

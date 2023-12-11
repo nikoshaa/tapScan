@@ -24,7 +24,7 @@ class _ScanResultState extends State<ScanResult> {
 
   @override
   Widget build(BuildContext context) {
-    final ktpProvider = Provider.of<KtpProvider>(context);
+    final ktpProvider = Provider.of<KtpProvider>(context, listen: false);
 
     return MainLayoutPage(
       useFixedBottomBar: true,
@@ -43,14 +43,17 @@ class _ScanResultState extends State<ScanResult> {
               text: ktpProvider.ktpScan?.jenisKelamin ?? "",
             ),
             KtpData(label: "RT/RW", text: ktpProvider.ktpScan?.rtRw ?? ""),
-            KtpData(label: "Kel/Desa", text: ktpProvider.ktpScan?.kelDesa ?? ""),
-            KtpData(label: "Kecamatan", text: ktpProvider.ktpScan?.kecamatan ?? ""),
+            KtpData(
+                label: "Kel/Desa", text: ktpProvider.ktpScan?.kelDesa ?? ""),
+            KtpData(
+                label: "Kecamatan", text: ktpProvider.ktpScan?.kecamatan ?? ""),
             KtpData(label: "Agama", text: ktpProvider.ktpScan?.agama ?? ""),
             KtpData(
               label: "Status Perkawinan",
               text: ktpProvider.ktpScan?.statusPerkawinan ?? "",
             ),
-            KtpData(label: "Pekerjaan", text: ktpProvider.ktpScan?.pekerjaan ?? ""),
+            KtpData(
+                label: "Pekerjaan", text: ktpProvider.ktpScan?.pekerjaan ?? ""),
             KtpData(
               label: "Kewarganegaraan",
               text: ktpProvider.ktpScan?.kewarganegaraan ?? "",
@@ -79,7 +82,7 @@ class PlaceAndTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ktpProvider = Provider.of<KtpProvider>(context);
+    final ktpProvider = Provider.of<KtpProvider>(context, listen: false);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -87,7 +90,8 @@ class PlaceAndTime extends StatelessWidget {
         Column(
           children: [
             Text(
-              ktpProvider.ktpScan?.kabupaten ?? "", // Ganti dengan properti yang sesuai
+              ktpProvider.ktpScan?.kabupaten ??
+                  "", // Ganti dengan properti yang sesuai
               style: const TextStyle(
                 color: Color.fromRGBO(0, 198, 232, 1),
               ),
@@ -104,7 +108,6 @@ class PlaceAndTime extends StatelessWidget {
     );
   }
 }
-
 
 class KtpData extends StatelessWidget {
   final String label;
