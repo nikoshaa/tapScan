@@ -1,67 +1,76 @@
+// File: pages/my_scans_page.dart
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/layouts/main_layout_page.dart';
 import 'package:tap_scan/models/ktp.dart';
+import 'package:tap_scan/pages/scan_result.dart';
+import 'package:tap_scan/providers/ktp_provider.dart';
 
 class MyScansPage extends StatelessWidget {
   const MyScansPage({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    KTP ktp = KTP(
-      provinsi: "PROVINSI SULAWESI SELATAN",
-      kabupaten: "KABUPATEN SOPPENG",
-      rtRw: "01/01",
-      kelDesa: "CELLENGENGE",
-      kecamatan: "BILA",
-      berlakuHingga: "SEUMUR HIDUP",
-      nama: "ABDURRAUF, S.Pd, M.Pd",
-      tempatTanggalLahir: "CELLENGENGE, 25-10-1972",
-      jenisKelamin: "LAKI-LAKI",
-      agama: "ISLAM",
-      alamat: "BILA",
-      kewarganegaraan: "WNI",
-      pekerjaan: "PEGAWAI NEGERI SIPIL (PNS)",
-      golonganDarah: "O",
-      statusPerkawinan: "KAWIN",
-      nik: "7312042510720002",
-      foto: "ktp.png",
-    );
+    final ktpProvider = Provider.of<KtpProvider>(context);
+    User? currentUser = FirebaseAuth.instance.currentUser;
 
-    return WillPopScope(
-      onWillPop: () async {
-        // Saat tombol "Back" perangkat ditekan
-        // Tampilkan dialog atau lakukan sesuatu jika diperlukan
-        // Gunakan SystemNavigator.pop() untuk keluar dari aplikasi
-        SystemNavigator.pop();
-        return true; // Setel ke false jika Anda ingin mencegah aksi kembali
+    return FutureBuilder(
+      future:
+          ktpProvider.fetchKtps(currentUser!.uid), // Ganti dengan user_id yang sesuai
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          return WillPopScope(
+            onWillPop: () async {
+              SystemNavigator.pop();
+              return true;
+            },
+            child: MainLayoutPage(
+              widget: Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  // Menampilkan daftar KTP dari provider
+                  for (var ktp in ktpProvider.ktps)
+                    Column(
+                      children: [
+                        KtpCard(
+                          ktp: ktp,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            // Ambil ktpId dari item yang diklik dan lanjutkan ke ScanResult
+                            final ktpId =
+                                "contohKtpId"; // Ganti dengan nilai yang sesuai
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ScanResult(ktpId: ktpId),
+                              ),
+                            );
+                          },
+                          child: KtpCard(
+                            ktp: ktp,
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+              activeIndex: 0,
+            ),
+          );
+        }
       },
-      child: MainLayoutPage(
-        widget: Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            KtpCard(
-              ktp: ktp,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            KtpCard(
-              ktp: ktp,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            KtpCard(
-              ktp: ktp,
-            ),
-          ],
-        ),
-        activeIndex: 0,
-      ),
     );
   }
 }

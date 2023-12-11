@@ -1,29 +1,39 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tap_scan/models/ktp.dart';
 
 class KtpProvider extends ChangeNotifier {
-  KTP ktpScan = KTP(
-    provinsi: "PROVINSI SULAWESI SELATAN",
-    kabupaten: "KABUPATEN SOPPENG",
-    rtRw: "01/01",
-    kelDesa: "CELLENGENGE",
-    kecamatan: "BILA",
-    berlakuHingga: "SEUMUR HIDUP",
-    nama: "ABDURRUSDI, S.Pd, M.Pd",
-    tempatTanggalLahir: "CELLENGENGE, 25-10-1972",
-    jenisKelamin: "LAKI-LAKI",
-    agama: "ISLAM",
-    alamat: "BILA",
-    kewarganegaraan: "WNI",
-    pekerjaan: "PEGAWAI NEGERI SIPIL (PNS)",
-    golonganDarah: "O",
-    statusPerkawinan: "KAWIN",
-    nik: "7312042510720002",
-    foto: "ktp.png",
-  );
+  List<KTP> ktps = [];
+  KTP? ktpScan;
 
-  void UpdateKTP(KTP ktp) {
-    ktpScan = ktp;
-    notifyListeners();
+  Future<void> fetchKtps(String userId) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('ktps')
+          .get();
+
+      ktps = snapshot.docs.map((doc) => KTP.fromFirestore(doc)).toList();
+      notifyListeners();
+    } catch (error) {
+      print('Error fetching KTPs: $error');
+    }
+  }
+
+  Future<void> fetchKtp(String userId, String ktpId) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('ktps')
+          .doc(ktpId)
+          .get();
+
+      ktpScan = KTP.fromFirestore(snapshot);
+      notifyListeners();
+    } catch (error) {
+      print('Error fetching KTP: $error');
+    }
   }
 }
