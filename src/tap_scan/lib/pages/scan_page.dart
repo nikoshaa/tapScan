@@ -36,6 +36,7 @@ class _CameraPageState extends State<CameraPage> {
       return;
     }
 
+    print("Masuk controller");
     controller = CameraController(
       cameras[0],
       ResolutionPreset.medium,
@@ -80,37 +81,76 @@ class _CameraPageState extends State<CameraPage> {
       );
     }
 
-    Future<void> _postImage(File imageFile) async {
-      try {
-        print("Masuk post image");
-        const String apiUrl = "http://192.168.76.9:5006/media/upload";
-        // Create a new multipart request
-        var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+    Future<void> sendPostImage(File imageFile) async {
+      var stream = http.ByteStream(imageFile.openRead());
+      stream.cast();
 
-        // Add the image file to the request
-        request.files
-            .add(await http.MultipartFile.fromPath('image', imageFile.path));
+      var length = await imageFile.length();
 
-        print("Sending the request");
-        // Send the request
-        var response = await request.send();
+      const String apiUrl = "http://192.168.76.9:5006/media/upload";
 
-        print("request sent");
-        // Check the response status
-        if (response.statusCode == 200) {
-          print('Image uploaded successfully');
-          // Handle any additional logic after successful upload
-        } else {
-          print('Failed to upload image. Status code: ${response.statusCode}');
-        }
-      } catch (error) {
-        print('Error uploading image: $error');
+      var uri = Uri.parse(apiUrl);
+
+      var request = http.MultipartRequest("POST", uri);
+
+      request.fields['token'] = '#@<!3c8e_237bc+v)ps;*&er';
+
+      var multipartFile = http.MultipartFile(
+        'image', stream, length,
+        // filename: imageFile.path
+      );
+      request.files.add(multipartFile);
+
+      print("Sending the request");
+      var response = await request.send();
+      print("request sent");
+
+      if (response.statusCode == 200) {
+        print('Image uploaded successfully');
+        // Handle any additional logic after successful upload
+      } else {
+        print('Failed to upload image. Status code: ${response.statusCode}');
       }
+
+      // request.headers.addAll({
+      //   "Content-Type": "multipart/form-data",
+      //   "Accept": "application/json",
+      // });
+
+      // try {
+      //   print("Masuk post image");
+      //   // Create a new multipart request
+      //   var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+
+      //   // Add the image file to the request
+      //   request.files
+      //       .add(await http.MultipartFile.fromPath('image', imageFile.path));
+
+      //   print("Sending the request");
+      //   // Send the request
+      //   var response = await request.send();
+
+      //   print("request sent");
+      //   // Check the response status
+      //   if (response.statusCode == 200) {
+      //     print('Image uploaded successfully');
+      //     // Handle any additional logic after successful upload
+      //   } else {
+      //     print('Failed to upload image. Status code: ${response.statusCode}');
+      //   }
+      // } catch (error) {
+      //   print('Error uploading image: $error');
+      // }
     }
 
     postImage(path) async {
+      if (!controller.value.isInitialized) {
+        print("Camera is not initialized");
+        return;
+      }
+
       File imageFile = File(path);
-      await _postImage(imageFile);
+      await sendPostImage(imageFile);
     }
 
     return MainLayoutPage(
