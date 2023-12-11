@@ -6,6 +6,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
 import 'package:tap_scan/pages/register_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -78,16 +80,23 @@ class _LoginPageState extends State<LoginPage> {
                       // User is not logged in, show login UI
                       return Column(
                         children: [
-                          MainTextField(
-                            hintText: "Username",
-                            controller: usernameController,
+                          Container(
+                            color: Colors
+                                .white, // Warna latar belakang untuk username
+                            child: TextFormField(
+                              controller: usernameController,
+                              decoration: InputDecoration(
+                                labelText: "Username",
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 16.0, vertical: 12.0),
+                              ),
+                            ),
                           ),
                           const SizedBox(
                             height: 30,
                           ),
-                          MainTextField(
-                            hintText: "Password",
-                            controller: passwordController,
+                          PasswordTextInput(
+                            passwordController: passwordController,
                           ),
                           const SizedBox(
                             height: 10,
@@ -222,5 +231,45 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+}
+
+class PasswordTextInput extends StatefulWidget {
+  final TextEditingController passwordController;
+  const PasswordTextInput({super.key, required this.passwordController});
+
+  @override
+  State<PasswordTextInput> createState() => _PasswordTextInputState();
+}
+
+class _PasswordTextInputState extends State<PasswordTextInput> {
+  bool _isSecurePassword = true;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white, // Warna latar belakang untuk password
+      child: TextFormField(
+        obscureText: _isSecurePassword,
+        controller: widget.passwordController,
+        decoration: InputDecoration(
+          labelText: "Password",
+          suffixIcon: togglePassword(),
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+        ),
+      ),
+    );
+  }
+
+  Widget togglePassword() {
+    return IconButton(
+        onPressed: () {
+          setState(() {
+            _isSecurePassword = !_isSecurePassword;
+          });
+        },
+        icon: _isSecurePassword
+            ? Icon(Icons.visibility)
+            : Icon(Icons.visibility_off));
   }
 }
