@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:tap_scan/models/ktp.dart';
@@ -430,9 +430,9 @@ class MainFloatingActionButton extends StatelessWidget {
           },
         );
       },
-      // label: const Text(''),
-      child: Center(child: const Icon(Icons.camera)),
       elevation: 4.0,
+      // label: const Text(''),
+      child: const Center(child: Icon(Icons.camera)),
     );
   }
 }
@@ -463,7 +463,9 @@ class ModalBottomSheetContent extends StatelessWidget {
             MainButton(
               function: () async {
                 final cameras = await availableCameras();
-                final firstCamera = cameras.first;
+                // final firstCamera = cameras.first;
+
+                print("cameras: $cameras");
                 if (context.mounted) {
                   Navigator.push(
                     context,
