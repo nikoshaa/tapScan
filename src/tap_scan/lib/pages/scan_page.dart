@@ -223,7 +223,7 @@ class _CameraPageState extends State<CameraPage> {
                         // get image path
                         print("Masuk if image not null");
                         final path = file.path;
-                        postImage(path);
+                        // postImage(path);
                         Navigator.push(
                           context,
                           PageTransition(

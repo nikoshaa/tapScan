@@ -7,6 +7,7 @@ import 'package:tap_scan/pages/welcome_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart'; // Import the MyScansPage
 import 'package:tap_scan/providers/ktp_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:tap_scan/providers/user_provider.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -46,7 +47,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<KtpProvider>(create: (_) => KtpProvider())
+        ChangeNotifierProvider<KtpProvider>(create: (_) => KtpProvider()),
+        ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider())
       ],
       child: MaterialApp(
         title: 'tapScan',

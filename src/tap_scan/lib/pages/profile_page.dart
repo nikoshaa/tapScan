@@ -1,11 +1,25 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:tap_scan/components/components.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
+import 'package:tap_scan/providers/user_provider.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +47,98 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(
                 height: 40,
               ),
-              const ProfilePic(),
+              Stack(
+                children: [
+                  const ProfilePic(),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: InkWell(
+                      onTap: () async {
+                        try {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          final ImageSource? source =
+                              await showDialog<ImageSource>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Select the image source"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(
+                                      context, ImageSource.camera),
+                                  child: const Text("Camera"),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(
+                                      context, ImageSource.gallery),
+                                  child: const Text("Gallery"),
+                                ),
+                              ],
+                            ),
+                          );
+
+                          if (source == null) return;
+
+                          final image =
+                              await ImagePicker().pickImage(source: source);
+                          if (image == null) return;
+                          final cropped = await ImageCropper()
+                              .cropImage(sourcePath: image.path);
+
+                          if (cropped == null) return;
+
+                          final currentUser = FirebaseAuth.instance.currentUser;
+
+                          final ref = FirebaseStorage.instance
+                              .ref()
+                              .child('profile')
+                              .child('${currentUser!.uid}.png');
+
+                          await ref.putFile(File(cropped.path));
+
+                          await currentUser
+                              .updatePhotoURL(await ref.getDownloadURL());
+                          await currentUser.reload();
+
+                          if (context.mounted) {
+                            context
+                                .read<UserProvider>()
+                                .setUser(FirebaseAuth.instance.currentUser);
+                          }
+                        } finally {
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(0, 198, 232, 1),
+                          borderRadius: BorderRadius.circular(90),
+                        ),
+                        child: _isLoading
+                            ? const SizedBox(
+                                width: 28,
+                                height: 28,
+                                child: Padding(
+                                  padding: EdgeInsets.all(2.0),
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
+                            : const Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                              ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(
                 height: 20,
               ),
@@ -80,10 +185,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
-  User? currentUser = FirebaseAuth.instance.currentUser;
+  // User? currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = Provider.of<UserProvider?>(context)?.user;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Edit Profile"),
@@ -225,15 +332,22 @@ class ProfilePic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<UserProvider>();
+
     return SizedBox(
       width: 150,
       height: 150,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(90),
-        child: Image.asset(
-          "assets/images/profile.png",
-          fit: BoxFit.cover,
-        ),
+        child: user.user?.photoURL != null
+            ? Image.network(
+                user.user!.photoURL!,
+                fit: BoxFit.cover,
+              )
+            : Image.asset(
+                "assets/images/profile.png",
+                fit: BoxFit.cover,
+              ),
       ),
     );
   }
