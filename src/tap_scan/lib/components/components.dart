@@ -219,7 +219,7 @@ class MainNavBar extends StatelessWidget {
     List<String> pages = ["MY SCANS", "DOCUMENTS", "PDF"];
     List<Function> goTos = [goToMyScans, goToMyDocs, goToPdf];
 
-    double horizontalPadding = activeIndex == 1 ? 10 : 30.0;
+    double horizontalPadding = activeIndex == 1 ? 10 : 20.0;
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Container(
@@ -242,8 +242,9 @@ class MainNavBar extends StatelessWidget {
                             ),
                             padding: MaterialStateProperty.all<EdgeInsets>(
                               EdgeInsets.only(
-                                  right: horizontalPadding,
-                                  left: horizontalPadding),
+                                right: horizontalPadding,
+                                left: horizontalPadding,
+                              ),
                             ),
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(

@@ -81,6 +81,10 @@ class ProfileDatas extends StatelessWidget {
           return Text('Error: ${snapshot.error}');
         }
 
+        if (!snapshot.hasData || !snapshot.data!.exists) {
+          return Text('Tidak ada data');
+        }
+
         // Mendapatkan data dari dokumen Firestore
         String email = snapshot.data!['email'];
         String name = snapshot.data!['username'];

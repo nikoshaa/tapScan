@@ -73,6 +73,12 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
+    // fetch screen size
+    final size = MediaQuery.of(context).size;
+    var camera = controller.value;
+    var scale = size.aspectRatio * camera.aspectRatio;
+    if (scale < 1) scale = 1 / scale;
+
     goToMain() {
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -169,9 +175,10 @@ class _CameraPageState extends State<CameraPage> {
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               child: controller.value.isInitialized
                   ? SizedBox(
-                      height: 200,
+                      height: 300,
                       width: 300,
-                      child: CameraPreview(controller),
+                      child: Transform.scale(
+                          scale: scale, child: CameraPreview(controller)),
                     )
                   : const CircularProgressIndicator(),
             ),
