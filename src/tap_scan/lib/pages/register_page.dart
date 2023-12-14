@@ -54,6 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
               MainTextField(
                 hintText: "Password",
                 controller: passwordController,
+                obscureText: true,
               ),
               const SizedBox(
                 height: 20,
@@ -61,6 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
               MainTextField(
                 hintText: "Password Confirmation",
                 controller: passwordConfirmationController,
+                obscureText: true,
               ),
               const SizedBox(
                 height: 40,
@@ -99,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 buttonText: "Register",
               ),
               const SizedBox(
-                height: 10,
+                height: 20,
               ),
               const Text(
                 "Or",
@@ -111,6 +113,9 @@ class _RegisterPageState extends State<RegisterPage> {
               ContinueWithGoogleButton(
                 function: () {},
                 text: "Register With Google",
+              ),
+              const SizedBox(
+                height: 10,
               ),
               const ToLogin()
             ],
@@ -141,6 +146,7 @@ class _ToLoginState extends State<ToLogin> {
             "Already have an account?",
             style: TextStyle(color: Colors.white),
           ),
+          const SizedBox(height: 10),
           MouseRegion(
             onEnter: (_) {
               // Ubah warna teks menjadi oranye
@@ -177,11 +183,3 @@ class _ToLoginState extends State<ToLogin> {
     );
   }
 }
-
-
-// class RegisterPage extends StatelessWidget {
-//   const RegisterPage({super.key});
-
-//   @override
-  
-// }

@@ -87,14 +87,20 @@ class MainButton extends StatelessWidget {
 
 class MainTextField extends StatelessWidget {
   final String hintText;
+  final bool obscureText;
   final TextEditingController controller;
-  const MainTextField(
-      {super.key, required this.hintText, required this.controller});
+  const MainTextField({
+    super.key,
+    required this.hintText,
+    required this.controller,
+    this.obscureText = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      obscureText: obscureText,
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,

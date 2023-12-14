@@ -43,7 +43,7 @@ class _CameraPageState extends State<CameraPage> {
     );
 
     try {
-      controller.initialize().then((_) {
+      await controller.initialize().then((_) {
         if (!mounted) {
           return;
         }
@@ -71,13 +71,40 @@ class _CameraPageState extends State<CameraPage> {
     super.dispose();
   }
 
+  double getCameraScale(context, Size size) {
+    final camera = controller.value;
+    var scale = size.aspectRatio * camera.aspectRatio;
+    if (scale < 1) scale = 1 / scale;
+    return scale;
+  }
+
+  Widget cameraWidget(context) {
+    var camera = controller.value;
+    // fetch screen size
+    final size = MediaQuery.of(context).size;
+
+    // calculate scale depending on screen and camera ratios
+    // this is actually size.aspectRatio / (1 / camera.aspectRatio)
+    // because camera preview size is received as landscape
+    // but we're calculating for portrait orientation
+    var scale = size.aspectRatio * camera.aspectRatio;
+
+    // to prevent scaling down, invert the value
+    if (scale < 1) scale = 1 / scale;
+
+    return Transform.scale(
+      scale: scale,
+      child: Center(
+        child: CameraPreview(controller),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // fetch screen size
     final size = MediaQuery.of(context).size;
     var camera = controller.value;
-    var scale = size.aspectRatio * camera.aspectRatio;
-    if (scale < 1) scale = 1 / scale;
 
     goToMain() {
       Navigator.of(context).push(
@@ -174,11 +201,9 @@ class _CameraPageState extends State<CameraPage> {
             ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               child: controller.value.isInitialized
-                  ? SizedBox(
-                      height: 300,
-                      width: 300,
-                      child: Transform.scale(
-                          scale: scale, child: CameraPreview(controller)),
+                  ? Container(
+                      color: Colors.red,
+                      child: cameraWidget(context),
                     )
                   : const CircularProgressIndicator(),
             ),

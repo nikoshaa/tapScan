@@ -246,10 +246,6 @@ class _LoginPageState extends State<LoginPage> {
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height,
                         );
-                        // else {
-                        //   // User is logged in, navigate to another page or show different UI
-                        //   return MyScansPage(); // Adjust accordingly
-                        // }
                       } else {
                         // Show a loading indicator or placeholder UI while checking authentication state
                         return CircularProgressIndicator();
