@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:tap_scan/components/components.dart';
@@ -34,6 +36,7 @@ class _CameraPageState extends State<CameraPage> {
       return;
     }
 
+    print("Masuk controller");
     controller = CameraController(
       cameras[0],
       ResolutionPreset.medium,
@@ -70,12 +73,90 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
+    // fetch screen size
+    final size = MediaQuery.of(context).size;
+    var camera = controller.value;
+    var scale = size.aspectRatio * camera.aspectRatio;
+    if (scale < 1) scale = 1 / scale;
+
     goToMain() {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const MyScansPage(),
         ),
       );
+    }
+
+    Future<void> sendPostImage(File imageFile) async {
+      var stream = http.ByteStream(imageFile.openRead());
+      stream.cast();
+
+      var length = await imageFile.length();
+
+      const String apiUrl = "http://192.168.76.9:5006/media/upload";
+
+      var uri = Uri.parse(apiUrl);
+
+      var request = http.MultipartRequest("POST", uri);
+
+      request.fields['token'] = '#@<!3c8e_237bc+v)ps;*&er';
+
+      var multipartFile = http.MultipartFile(
+        'image', stream, length,
+        // filename: imageFile.path
+      );
+      request.files.add(multipartFile);
+
+      print("Sending the request");
+      var response = await request.send();
+      print("request sent");
+
+      if (response.statusCode == 200) {
+        print('Image uploaded successfully');
+        // Handle any additional logic after successful upload
+      } else {
+        print('Failed to upload image. Status code: ${response.statusCode}');
+      }
+
+      // request.headers.addAll({
+      //   "Content-Type": "multipart/form-data",
+      //   "Accept": "application/json",
+      // });
+
+      // try {
+      //   print("Masuk post image");
+      //   // Create a new multipart request
+      //   var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+
+      //   // Add the image file to the request
+      //   request.files
+      //       .add(await http.MultipartFile.fromPath('image', imageFile.path));
+
+      //   print("Sending the request");
+      //   // Send the request
+      //   var response = await request.send();
+
+      //   print("request sent");
+      //   // Check the response status
+      //   if (response.statusCode == 200) {
+      //     print('Image uploaded successfully');
+      //     // Handle any additional logic after successful upload
+      //   } else {
+      //     print('Failed to upload image. Status code: ${response.statusCode}');
+      //   }
+      // } catch (error) {
+      //   print('Error uploading image: $error');
+      // }
+    }
+
+    postImage(path) async {
+      if (!controller.value.isInitialized) {
+        print("Camera is not initialized");
+        return;
+      }
+
+      File imageFile = File(path);
+      await sendPostImage(imageFile);
     }
 
     return MainLayoutPage(
@@ -94,9 +175,10 @@ class _CameraPageState extends State<CameraPage> {
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               child: controller.value.isInitialized
                   ? SizedBox(
-                      height: 200,
+                      height: 300,
                       width: 300,
-                      child: CameraPreview(controller),
+                      child: Transform.scale(
+                          scale: scale, child: CameraPreview(controller)),
                     )
                   : const CircularProgressIndicator(),
             ),
@@ -106,22 +188,28 @@ class _CameraPageState extends State<CameraPage> {
             MainButton(
               function: () {
                 print("Take a picture");
-                takePicture().then((XFile? file) {
-                  if (mounted) {
-                    setState(() {
-                      pictureFile = file;
-                    });
-                    if (file != null) {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                            child: const Progress(),
-                            type: PageTransitionType.rightToLeftJoined,
-                            childCurrent: const CameraPage()),
-                      );
+                takePicture().then(
+                  (XFile? file) {
+                    if (mounted) {
+                      setState(() {
+                        pictureFile = file;
+                      });
+                      if (file != null) {
+                        // get image path
+                        print("Masuk if image not null");
+                        final path = file.path;
+                        postImage(path);
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                              child: const Progress(),
+                              type: PageTransitionType.rightToLeftJoined,
+                              childCurrent: const CameraPage()),
+                        );
+                      }
                     }
-                  }
-                });
+                  },
+                );
               },
               buttonText: "Verification",
               onPressed: () {},
@@ -150,6 +238,7 @@ class _CameraPageState extends State<CameraPage> {
     }
 
     try {
+      print("Masuk try take picture");
       final XFile file = await cameraController.takePicture();
       return file;
     } on CameraException catch (e) {

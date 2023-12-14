@@ -141,37 +141,36 @@ class WhiteBox extends StatelessWidget {
                               Positioned(
                                 top: 0,
                                 right: 0,
-                                child: AlertDialog(
-                                  actions: [
-                                    Row(
-                                      children: [
-                                        IconButton(
-                                          icon: Icon(Icons.logout),
-                                          onPressed: () {
-                                            // Tambahkan logika logout di sini
-                                            FirebaseAuth.instance.signOut();
+                                child: InkWell(
+                                  onTap: () {
+                                    // Tambahkan logika logout di sini
+                                    FirebaseAuth.instance.signOut();
 
-                                            // Navigate to MyScansPage after logout
-                                            Navigator.of(context)
-                                                .pushAndRemoveUntil(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const LoginPage(),
-                                              ),
-                                              (route) => false,
-                                            );
-                                          },
-                                        ),
-                                        Text(
-                                          'Logout',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16.0,
+                                    // Navigate to MyScansPage after logout
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                        builder: (context) => const LoginPage(),
+                                      ),
+                                      (route) => false,
+                                    );
+                                  },
+                                  child: AlertDialog(
+                                    content: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.logout),
+                                          Text(
+                                            'Logout',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16.0,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
                             ],

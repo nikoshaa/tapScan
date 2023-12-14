@@ -219,7 +219,7 @@ class MainNavBar extends StatelessWidget {
     List<String> pages = ["MY SCANS", "DOCUMENTS", "PDF"];
     List<Function> goTos = [goToMyScans, goToMyDocs, goToPdf];
 
-    double horizontalPadding = activeIndex == 1 ? 10 : 30.0;
+    double horizontalPadding = activeIndex == 1 ? 10 : 20.0;
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Container(
@@ -242,8 +242,9 @@ class MainNavBar extends StatelessWidget {
                             ),
                             padding: MaterialStateProperty.all<EdgeInsets>(
                               EdgeInsets.only(
-                                  right: horizontalPadding,
-                                  left: horizontalPadding),
+                                right: horizontalPadding,
+                                left: horizontalPadding,
+                              ),
                             ),
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
@@ -309,13 +310,14 @@ class KtpCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.asset(
-              kIsWeb ? 'images/${ktp.foto}' : 'assets/images/${ktp.foto}',
-              height: 50,
-            ),
+            if (ktp.foto != null)
+              Image.network(
+                ktp.foto!,
+                height: 50,
+              ),
             Column(
               children: [
-                Text(ktp.nama),
+                Text(ktp.nama ?? '-'),
                 const Icon(
                   Icons.check_box_rounded,
                   color: Color.fromRGBO(204, 255, 210, 1),
@@ -472,7 +474,9 @@ class ModalBottomSheetContent extends StatelessWidget {
             MainButton(
               function: () async {
                 final cameras = await availableCameras();
-                final firstCamera = cameras.first;
+                // final firstCamera = cameras.first;
+
+                print("cameras: $cameras");
                 if (context.mounted) {
                   Navigator.push(
                     context,
