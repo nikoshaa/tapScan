@@ -607,7 +607,6 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
                     .cropImage(sourcePath: pickedFile!.path);
 
                 if (cropped == null) return;
-                print('cropped ada');
                 selectedImage = File(cropped.path);
                 await sendFileToApi(selectedImage!);
               },
@@ -625,7 +624,11 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
 
                 if (pickedFile != null) {
                   // Call the function to send image to the API
-                  selectedImage = File(pickedFile.path);
+                  final cropped = await ImageCropper()
+                      .cropImage(sourcePath: pickedFile!.path);
+
+                  if (cropped == null) return;
+                  selectedImage = File(cropped.path);
                   await sendFileToApi(selectedImage!);
                 }
               },
@@ -663,7 +666,8 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
     // stream.cast();
 
     // final length = await filePath.length();
-    final apiUrl = "https://5b89-103-108-20-70.ngrok.io/media/upload"; //pakai ngrok buat tes run local
+    final apiUrl =
+        "https://c5f5-103-108-20-74.ngrok.io/media/upload"; //pakai ngrok buat tes run local
 
     final uri = Uri.parse(apiUrl);
 
