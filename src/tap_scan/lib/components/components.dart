@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -16,6 +17,7 @@ import 'package:tap_scan/pages/my_scans_page.dart';
 import 'package:tap_scan/pages/pdf_page.dart';
 import 'package:tap_scan/pages/profile_page.dart';
 import 'package:tap_scan/pages/scan_page.dart';
+import 'package:http/http.dart' as http;
 
 class MainButton extends StatelessWidget {
   final String buttonText;
@@ -454,13 +456,131 @@ class MainFloatingActionButton extends StatelessWidget {
   }
 }
 
-class ModalBottomSheetContent extends StatelessWidget {
+// class ModalBottomSheetContent extends StatelessWidget {
+//   const ModalBottomSheetContent({
+//     super.key,
+//   });
+
+//   get http => null;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       height: 500,
+//       child: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           mainAxisSize: MainAxisSize.min,
+//           children: <Widget>[
+//             const Text(
+//               'Import an image to be converted',
+//               style: TextStyle(color: Color.fromRGBO(255, 240, 44, 1)),
+//             ),
+//             const SizedBox(
+//               height: 30,
+//             ),
+//             MainButton(
+//               function: () async {
+//                 final cameras = await availableCameras();
+//                 // final firstCamera = cameras.first;
+
+//                 print("cameras: $cameras");
+//                 if (context.mounted) {
+//                   Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                       builder: (context) => CameraPage(
+//                         cameras: cameras,
+//                       ),
+//                     ),
+//                   );
+//                 }
+//               },
+//               buttonText: "TAKE A PICTURE",
+//               iconData: Icons.camera_alt_outlined,
+//             ),
+//             const SizedBox(
+//               height: 30,
+//             ),
+//             MainButton(
+//               function: () async {
+//                 // Pick an image from the device's gallery
+//                 final pickedFile =
+//                     await ImagePicker().pickImage(source: ImageSource.gallery);
+//                 if (pickedFile != null) {
+//                   // Upload the image file to your server or cloud storage
+//                   final bytes = await pickedFile.readAsBytes();
+//                   final String base64Image = base64Encode(bytes);
+
+//                   // Send the base64 encoded image to your server
+//                   final response = await http.post(
+//                     Uri.parse('http://192.168.76.9:5006/media/upload'),
+//                     body: {'image': base64Image},
+//                   );
+
+//                   if (response.statusCode == 200) {
+//                     // Image uploaded successfully
+//                     print('Image uploaded successfully');
+//                   } else {
+//                     // Image upload failed
+//                     print('Image upload failed');
+//                   }
+//                 }
+//               },
+//               buttonText: "GALLERY",
+//               iconData: Icons.photo,
+//               horizontalPadding: 70,
+//             ),
+//             const SizedBox(
+//               height: 30,
+//             ),
+//             MainButton(
+//               function: () async {
+//                 // // Pick a file from the device's storage;
+//                 // var pickedFiles = await FilePicker.pickFiles();
+
+//                 // if (pickedFiles != null && pickedFiles.isNotEmpty) {
+//                 //   // Read the selected file's contents
+//                 //   final file = pickedFiles.first;
+//                 //   final bytes = await file.readAsBytes();
+
+//                 //   // Process the file contents as needed (e.g., upload to a server)
+//                 //   // Perform file upload or processing here
+//                 // }
+
+//                 FilePickerResult? result =
+//                     await FilePicker.platform.pickFiles(allowMultiple: true);
+
+//                 if (result != null) {
+//                   List<File> files =
+//                       result.paths.map((path) => File(path!)).toList();
+//                 } else {
+//                   // User canceled the picker
+//                 }
+//               },
+//               buttonText: "IMPORT PDF",
+//               iconData: Icons.picture_as_pdf_outlined,
+//               horizontalPadding: 55,
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+class ModalBottomSheetContent extends StatefulWidget {
   const ModalBottomSheetContent({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
-  get http => null;
+  @override
+  State<ModalBottomSheetContent> createState() =>
+      _ModalBottomSheetContentState();
+}
 
+class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
+  File? selectedImage;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -471,7 +591,7 @@ class ModalBottomSheetContent extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const Text(
-              'Import an image to be converted',
+              'Import an image or PDF to be converted',
               style: TextStyle(color: Color.fromRGBO(255, 240, 44, 1)),
             ),
             const SizedBox(
@@ -479,20 +599,17 @@ class ModalBottomSheetContent extends StatelessWidget {
             ),
             MainButton(
               function: () async {
-                final cameras = await availableCameras();
-                // final firstCamera = cameras.first;
+                final pickedFile = await ImagePicker().pickImage(
+                  source: ImageSource.camera,
+                );
 
-                print("cameras: $cameras");
-                if (context.mounted) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CameraPage(
-                        cameras: cameras,
-                      ),
-                    ),
-                  );
-                }
+                final cropped = await ImageCropper()
+                    .cropImage(sourcePath: pickedFile!.path);
+
+                if (cropped == null) return;
+                print('cropped ada');
+                selectedImage = File(cropped.path);
+                await sendFileToApi(selectedImage!);
               },
               buttonText: "TAKE A PICTURE",
               iconData: Icons.camera_alt_outlined,
@@ -502,27 +619,14 @@ class ModalBottomSheetContent extends StatelessWidget {
             ),
             MainButton(
               function: () async {
-                // Pick an image from the device's gallery
-                final pickedFile =
-                    await ImagePicker().pickImage(source: ImageSource.gallery);
+                final pickedFile = await ImagePicker().pickImage(
+                  source: ImageSource.gallery,
+                );
+
                 if (pickedFile != null) {
-                  // Upload the image file to your server or cloud storage
-                  final bytes = await pickedFile.readAsBytes();
-                  final String base64Image = base64Encode(bytes);
-
-                  // Send the base64 encoded image to your server
-                  final response = await http.post(
-                    Uri.parse('https://your-server.com/upload-image'),
-                    body: {'image': base64Image},
-                  );
-
-                  if (response.statusCode == 200) {
-                    // Image uploaded successfully
-                    print('Image uploaded successfully');
-                  } else {
-                    // Image upload failed
-                    print('Image upload failed');
-                  }
+                  // Call the function to send image to the API
+                  selectedImage = File(pickedFile.path);
+                  await sendFileToApi(selectedImage!);
                 }
               },
               buttonText: "GALLERY",
@@ -534,26 +638,14 @@ class ModalBottomSheetContent extends StatelessWidget {
             ),
             MainButton(
               function: () async {
-                // // Pick a file from the device's storage;
-                // var pickedFiles = await FilePicker.pickFiles();
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  allowMultiple: true,
+                );
 
-                // if (pickedFiles != null && pickedFiles.isNotEmpty) {
-                //   // Read the selected file's contents
-                //   final file = pickedFiles.first;
-                //   final bytes = await file.readAsBytes();
-
-                //   // Process the file contents as needed (e.g., upload to a server)
-                //   // Perform file upload or processing here
-                // }
-
-                FilePickerResult? result =
-                    await FilePicker.platform.pickFiles(allowMultiple: true);
-
-                if (result != null) {
-                  List<File> files =
-                      result.paths.map((path) => File(path!)).toList();
-                } else {
-                  // User canceled the picker
+                if (result != null && result.paths.isNotEmpty) {
+                  final file = File(result.paths.first!);
+                  // Call the function to send file to the API
+                  await sendFileToApi(File(file.path));
                 }
               },
               buttonText: "IMPORT PDF",
@@ -564,6 +656,60 @@ class ModalBottomSheetContent extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> sendFileToApi(File filePath) async {
+    // final stream = http.ByteStream(filePath.openRead());
+    // stream.cast();
+
+    // final length = await filePath.length();
+    final apiUrl = "https://5b89-103-108-20-70.ngrok.io/media/upload"; //pakai ngrok buat tes run local
+
+    final uri = Uri.parse(apiUrl);
+
+    var request = http.MultipartRequest("POST", uri);
+    // final token = '#@<!3c8e_237bc+v)ps;*&er';
+
+    // // Set token as a field in the request
+    // request.fields['token'] = token;
+
+    // final multipartFile = http.MultipartFile(
+    //   'file',
+    //   stream,
+    //   length,
+    //   filename: 'file',
+    // );
+    // request.files.add(http.MultipartFile(
+    //     'image', filePath.readAsBytes().asStream(), filePath.lengthSync(),
+    //     filename: filePath.toString()));
+
+    Map<String, String> headers = {"Content-type": "multipart/form-data"};
+    request.files.add(
+      http.MultipartFile(
+        'image',
+        filePath.readAsBytes().asStream(),
+        filePath.lengthSync(),
+        filename: filePath.path,
+      ),
+    );
+    request.headers.addAll(headers);
+
+    // request.headers.addAll({
+    //   "Content-Type": "multipart/form-data",
+    // });
+
+    try {
+      // Send the request
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        print('File uploaded successfully');
+      } else {
+        print('Failed to upload file. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error uploading file: $error');
+    }
   }
 }
 

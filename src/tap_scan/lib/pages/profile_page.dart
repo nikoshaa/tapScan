@@ -98,9 +98,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
                           await ref.putFile(File(cropped.path));
 
-                          await currentUser
-                              .updatePhotoURL(await ref.getDownloadURL());
+                          final downloadUrl = await ref.getDownloadURL();
+
+                          await currentUser.updatePhotoURL(downloadUrl);
                           await currentUser.reload();
+
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(currentUser.uid)
+                              .update({'fotoprofile': downloadUrl});
 
                           if (context.mounted) {
                             context
@@ -332,23 +338,41 @@ class ProfilePic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<UserProvider>();
+    User? currentUser = FirebaseAuth.instance.currentUser;
 
-    return SizedBox(
-      width: 150,
-      height: 150,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(90),
-        child: user.user?.photoURL != null
-            ? Image.network(
-                user.user!.photoURL!,
-                fit: BoxFit.cover,
-              )
-            : Image.asset(
-                "assets/images/profile.png",
-                fit: BoxFit.cover,
-              ),
-      ),
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser!.uid)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator(); // Menampilkan indikator loading jika data belum tersedia
+        }
+
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+
+        // final user = context.watch<UserProvider>();
+
+        return SizedBox(
+          width: 150,
+          height: 150,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(90),
+            child: snapshot.data!['fotoprofile'] != null
+                ? Image.network(
+                    snapshot.data!['fotoprofile'],
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    "assets/images/profile.png",
+                    fit: BoxFit.cover,
+                  ),
+          ),
+        );
+      },
     );
   }
 }
