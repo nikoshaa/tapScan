@@ -663,13 +663,13 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
                         TextButton(
                           onPressed: () {
                             method = "default";
-                            // Navigator.pop(context); // Menutup dialog
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ScanValidate2(),
-                              ),
-                            );
+                            Navigator.pop(context); // Menutup dialog
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => const ScanValidate2(),
+                            //   ),
+                            // );
                           },
                           child: const Text("Manual"),
                         ),
@@ -679,12 +679,12 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
                             Navigator.pop(context); // Menutup dialog
 
                             // Navigator.pop(context); // Menutup dialog
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ScanValidate2(),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => const ScanValidate2(),
+                            //   ),
+                            // );
                           },
                           child: const Text("Tesseract"),
                         ),
@@ -744,7 +744,7 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
     // final length = await filePath.length();
     const apiUrl =
         // "https://fkmjq5h3-5006.asse.devtunnels.ms/media/upload";
-        "https://sjqq06bn-5006.asse.devtunnels.ms/media/upload";
+        "https://3dad-103-108-20-66.ngrok-free.app/media/upload";
 
     final uri = Uri.parse(apiUrl);
 

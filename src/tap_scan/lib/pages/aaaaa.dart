@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdf/widgets.dart' as pw;
@@ -70,21 +71,19 @@ class _ScanValidate2State extends State<ScanValidate2> {
 
   Future<void> updateFirestoreData() async {
     try {
-      const userUid =
-          'userUid'; // Ganti dengan cara Anda mendapatkan UID pengguna
-      final ktpId = _ktpController.text;
+      final userUid = FirebaseAuth.instance.currentUser; // Ganti dengan cara Anda mendapatkan UID pengguna
 
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(userUid)
+          .doc(userUid as String?)
           .collection('ktps')
-          .doc(ktpId)
-          .update({
+          .doc('nik')
+          .set({
         'nik': _ktpController.text,
-        // 'nama': _ktpController.text,
-        // 'tempatTanggalLahir': _ktpController.text,
-        // 'jenisKelamin': _ktpController.text,
-        // 'alamat': _ktpController.text,
+        'nama': _ktpController.text,
+        'tempatTanggalLahir': _ktpController.text,
+        'jenisKelamin': _ktpController.text,
+        'alamat': _ktpController.text,
       });
 
       print('Data updated successfully in Firestore.');
