@@ -1,7 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:tap_scan/components/components.dart';
 
 class ScanValidate2 extends StatefulWidget {
   const ScanValidate2({Key? key}) : super(key: key);
@@ -19,11 +23,32 @@ class _ScanValidate2State extends State<ScanValidate2> {
     _ktpController = TextEditingController();
     // Set nilai awal berdasarkan data dari API Flask
     fetchKtpDataFromApi();
+
+    // dummy data untuk data ktp
+    List<String> dummyData = [
+      "nik",
+      "2141720117",
+      "nama",
+      "Ziedny",
+      "tempatTanggalLahir",
+      "11-06-2003",
+      "jenisKelamin",
+      "laki-laki",
+      "alamat",
+      "JL.alamat"
+    ];
+
+    // Concatenate the list elements into one string with "\n" as the separator
+    String concatenatedDummyData = dummyData.join("\n");
+    setState(() {
+      _ktpController.text = concatenatedDummyData;
+    });
   }
 
   Future<void> fetchKtpDataFromApi() async {
     try {
-      final apiUrl = 'https://sjqq06bn-5006.asse.devtunnels.ms/get/ktp'; // Ganti URL API Flask Anda
+      const apiUrl =
+          'https://sjqq06bn-5006.asse.devtunnels.ms/get/ktp'; // Ganti URL API Flask Anda
       final response = await http.get(Uri.parse(apiUrl));
 
       if (response.statusCode == 200) {
@@ -34,7 +59,8 @@ class _ScanValidate2State extends State<ScanValidate2> {
         });
       } else {
         // Handle error
-        print('Failed to fetch data from API. Status code: ${response.statusCode}');
+        print(
+            'Failed to fetch data from API. Status code: ${response.statusCode}');
       }
     } catch (error) {
       // Handle error
@@ -44,7 +70,8 @@ class _ScanValidate2State extends State<ScanValidate2> {
 
   Future<void> updateFirestoreData() async {
     try {
-      final userUid = 'userUid'; // Ganti dengan cara Anda mendapatkan UID pengguna
+      const userUid =
+          'userUid'; // Ganti dengan cara Anda mendapatkan UID pengguna
       final ktpId = _ktpController.text;
 
       await FirebaseFirestore.instance
@@ -54,10 +81,10 @@ class _ScanValidate2State extends State<ScanValidate2> {
           .doc(ktpId)
           .update({
         'nik': _ktpController.text,
-        'nama': _ktpController.text,
-        'tempatTanggalLahir': _ktpController.text,
-        'jenisKelamin': _ktpController.text,
-        'alamat': _ktpController.text,
+        // 'nama': _ktpController.text,
+        // 'tempatTanggalLahir': _ktpController.text,
+        // 'jenisKelamin': _ktpController.text,
+        // 'alamat': _ktpController.text,
       });
 
       print('Data updated successfully in Firestore.');
@@ -71,10 +98,10 @@ class _ScanValidate2State extends State<ScanValidate2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan Validate'),
+        title: const Text('Scan Validate'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             // ... (widget lain tetap sama) ...
@@ -96,11 +123,12 @@ class _ScanValidate2State extends State<ScanValidate2> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ScanResult(ktpId: _ktpController.text),
+                    builder: (context) =>
+                        ScanResult(ktpInner: _ktpController.text),
                   ),
                 );
               },
-              child: Text("Submit"),
+              child: const Text("Submit"),
             ),
           ],
         ),
@@ -110,26 +138,47 @@ class _ScanValidate2State extends State<ScanValidate2> {
 }
 
 class ScanResult extends StatelessWidget {
-  final String ktpId;
+  final String ktpInner;
 
-  const ScanResult({Key? key, required this.ktpId}) : super(key: key);
+  const ScanResult({Key? key, required this.ktpInner}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan Result'),
+        title: const Text('Scan Result'),
       ),
       body: Center(
-        child: Text('KTP ID: $ktpId'),
+        child: Column(
+          children: [
+            Text('KTP ID: $ktpInner'),
+            MainButton(
+                function: () => generatePdf(), buttonText: "Generate PDF"),
+          ],
+        ),
       ),
     );
+  }
+
+  Future<void> generatePdf() async {
+    final pdf = pw.Document();
+
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) => pw.Center(
+          child: pw.Text(ktpInner),
+        ),
+      ),
+    );
+
+    final file = File('example.pdf');
+    await file.writeAsBytes(await pdf.save());
   }
 }
 
 void main() {
   runApp(
-    MaterialApp(
+    const MaterialApp(
       home: ScanValidate2(),
     ),
   );

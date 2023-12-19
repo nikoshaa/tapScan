@@ -1,12 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
@@ -17,8 +15,6 @@ import 'package:tap_scan/pages/documents_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
 import 'package:tap_scan/pages/pdf_page.dart';
 import 'package:tap_scan/pages/profile_page.dart';
-import 'package:tap_scan/pages/scan_page.dart';
-import 'package:http/http.dart' as http;
 
 class MainButton extends StatelessWidget {
   final String buttonText;
@@ -654,10 +650,11 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
                 if (pickedFile != null) {
                   // Call the function to send image to the API
                   final cropped = await ImageCropper()
-                      .cropImage(sourcePath: pickedFile!.path);
+                      .cropImage(sourcePath: pickedFile.path);
 
                   if (cropped == null) return;
                   selectedImage = File(cropped.path);
+
                   await showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
@@ -670,7 +667,7 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ScanValidate2(),
+                                builder: (context) => const ScanValidate2(),
                               ),
                             );
                           },
@@ -680,12 +677,21 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
                           onPressed: () {
                             method = "tesseract";
                             Navigator.pop(context); // Menutup dialog
+
+                            // Navigator.pop(context); // Menutup dialog
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ScanValidate2(),
+                              ),
+                            );
                           },
                           child: const Text("Tesseract"),
                         ),
                       ],
                     ),
                   );
+
                   await sendFileToApi(selectedImage!, method!);
                 }
               },
@@ -736,7 +742,7 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
     // stream.cast();
 
     // final length = await filePath.length();
-    final apiUrl =
+    const apiUrl =
         // "https://fkmjq5h3-5006.asse.devtunnels.ms/media/upload";
         "https://sjqq06bn-5006.asse.devtunnels.ms/media/upload";
 
@@ -787,7 +793,7 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ScanValidate2(),
+            builder: (context) => const ScanValidate2(),
           ),
         );
       } else {

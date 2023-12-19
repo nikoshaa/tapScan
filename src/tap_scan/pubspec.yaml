@@ -52,6 +52,7 @@ dependencies:
   google_sign_in: ^6.2.0
   image_cropper: ^4.0.1
   firebase_storage: ^11.5.6
+  pdf: ^3.10.7
 
 dev_dependencies:
   flutter_test:
