@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:tap_scan/models/ktp.dart';
+import 'package:tap_scan/pages/aaaaa.dart';
 import 'package:tap_scan/pages/documents_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
 import 'package:tap_scan/pages/pdf_page.dart';
@@ -581,6 +582,8 @@ class ModalBottomSheetContent extends StatefulWidget {
 
 class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
   File? selectedImage;
+  String? method;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -608,7 +611,33 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
 
                 if (cropped == null) return;
                 selectedImage = File(cropped.path);
-                await sendFileToApi(selectedImage!);
+
+                // Menunggu hasil dari showDialog
+                await showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Select the method"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          method = "default";
+                          Navigator.pop(context); // Menutup dialog
+                        },
+                        child: const Text("Manual"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          method = "tesseract";
+                          Navigator.pop(context); // Menutup dialog
+                        },
+                        child: const Text("Tesseract"),
+                      ),
+                    ],
+                  ),
+                );
+
+                // Setelah pengguna memilih metode, lanjutkan dengan sendFileToApi
+                await sendFileToApi(selectedImage!, method!);
               },
               buttonText: "TAKE A PICTURE",
               iconData: Icons.camera_alt_outlined,
@@ -629,7 +658,35 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
 
                   if (cropped == null) return;
                   selectedImage = File(cropped.path);
-                  await sendFileToApi(selectedImage!);
+                  await showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text("Select the method"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            method = "default";
+                            // Navigator.pop(context); // Menutup dialog
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ScanValidate2(),
+                              ),
+                            );
+                          },
+                          child: const Text("Manual"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            method = "tesseract";
+                            Navigator.pop(context); // Menutup dialog
+                          },
+                          child: const Text("Tesseract"),
+                        ),
+                      ],
+                    ),
+                  );
+                  await sendFileToApi(selectedImage!, method!);
                 }
               },
               buttonText: "GALLERY",
@@ -647,8 +704,21 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
 
                 if (result != null && result.paths.isNotEmpty) {
                   final file = File(result.paths.first!);
+                  (context) => AlertDialog(
+                        title: const Text("Select the method"),
+                        actions: [
+                          TextButton(
+                            onPressed: () => method = "default",
+                            child: const Text("Manual"),
+                          ),
+                          TextButton(
+                            onPressed: () => method = "tesseract",
+                            child: const Text("Tesseract"),
+                          ),
+                        ],
+                      );
                   // Call the function to send file to the API
-                  await sendFileToApi(File(file.path));
+                  await sendFileToApi(File(file.path), method!);
                 }
               },
               buttonText: "IMPORT PDF",
@@ -661,13 +731,14 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
     );
   }
 
-  Future<void> sendFileToApi(File filePath) async {
+  Future<void> sendFileToApi(File filePath, String method) async {
     // final stream = http.ByteStream(filePath.openRead());
     // stream.cast();
 
     // final length = await filePath.length();
     final apiUrl =
-        "https://c5f5-103-108-20-74.ngrok.io/media/upload"; //pakai ngrok buat tes run local
+        // "https://fkmjq5h3-5006.asse.devtunnels.ms/media/upload";
+        "https://sjqq06bn-5006.asse.devtunnels.ms/media/upload";
 
     final uri = Uri.parse(apiUrl);
 
@@ -688,6 +759,7 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
     //     filename: filePath.toString()));
 
     Map<String, String> headers = {"Content-type": "multipart/form-data"};
+    headers['cara'] = method;
     request.files.add(
       http.MultipartFile(
         'image',
@@ -706,8 +778,18 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
       // Send the request
       final response = await request.send();
 
+      // Read the response data
+      final responseData = await response.stream.bytesToString();
+
       if (response.statusCode == 200) {
         print('File uploaded successfully');
+        print('Response Data: $responseData');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ScanValidate2(),
+          ),
+        );
       } else {
         print('Failed to upload file. Status code: ${response.statusCode}');
       }
