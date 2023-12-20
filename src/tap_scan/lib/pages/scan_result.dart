@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tap_scan/layouts/main_layout_page.dart';
@@ -5,7 +6,7 @@ import 'package:tap_scan/models/ktp.dart';
 import 'package:tap_scan/providers/ktp_provider.dart';
 
 class ScanResult extends StatefulWidget {
-  final String ktpId;
+  final String? ktpId;
 
   const ScanResult({Key? key, required this.ktpId}) : super(key: key);
 
@@ -19,7 +20,7 @@ class _ScanResultState extends State<ScanResult> {
     super.initState();
     // Ambil data KTP dari Firestore saat widget diinisialisasi
     final ktpProvider = Provider.of<KtpProvider>(context, listen: false);
-    ktpProvider.fetchKtp('userId', widget.ktpId);
+    ktpProvider.fetchKtp(FirebaseAuth.instance.currentUser!.uid, widget.ktpId);
   }
 
   @override
@@ -42,6 +43,7 @@ class _ScanResultState extends State<ScanResult> {
               label: "Jenis Kelamin",
               text: ktpProvider.ktpScan?.jenisKelamin ?? "",
             ),
+            KtpData(label: "Alamat", text: ktpProvider.ktpScan?.alamat ?? ""),
             KtpData(label: "RT/RW", text: ktpProvider.ktpScan?.rtRw ?? ""),
             KtpData(
                 label: "Kel/Desa", text: ktpProvider.ktpScan?.kelDesa ?? ""),

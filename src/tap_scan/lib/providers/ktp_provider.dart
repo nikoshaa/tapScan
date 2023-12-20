@@ -24,7 +24,7 @@ class KtpProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchKtp(String userId, String ktpId) async {
+  Future<void> fetchKtp(String userId, String? ktpId) async {
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection('users')

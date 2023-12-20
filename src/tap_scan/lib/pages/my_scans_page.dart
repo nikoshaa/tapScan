@@ -52,8 +52,7 @@ class MyScansPage extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             // Ambil ktpId dari item yang diklik dan lanjutkan ke ScanResult
-                            final ktpId =
-                                "contohKtpId"; // Ganti dengan nilai yang sesuai
+                            final ktpId = ktp.nik; // Ganti dengan nilai yang sesuai
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => ScanResult(ktpId: ktpId),

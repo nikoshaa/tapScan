@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:tap_scan/layouts/main_layout_page.dart';
 import 'package:tap_scan/pages/my_scans_page.dart';
 import 'package:tap_scan/pages/scan_result.dart';
 import 'package:tap_scan/providers/ktp_provider.dart';
+import 'package:http/http.dart' as http;
 
 class ScanValidate extends StatelessWidget {
   const ScanValidate({
@@ -38,26 +41,43 @@ class ScanValidate extends StatelessWidget {
       );
     }
 
-    return FutureBuilder<DocumentSnapshot>(
-      future: FirebaseFirestore.instance
-          .collection('ktps')
-          .doc('your_document_id')
-          .get(), // Ganti 'your_document_id' dengan ID dokumen Firestore yang sesuai
+    Future<Map<String, dynamic>> fetchDataFromApi() async {
+    // Ganti dengan implementasi sesuai kebutuhan untuk mengambil data dari API
+    // Misalnya, Anda bisa menggunakan http package untuk mengirim GET request ke API
+    final apiUrl = 'https://9452-114-6-31-174.ngrok-free.app/get/ktp'; // Ganti dengan URL API yang sesuai
+    final response = await http.get(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      return data;
+    } else {
+      throw Exception('Failed to load data from API');
+    }
+  }
+
+    return FutureBuilder<Map<String, dynamic>>(
+      future: fetchDataFromApi(), // Ganti 'your_document_id' dengan ID dokumen Firestore yang sesuai
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
 
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
 
-        if (!snapshot.hasData || !snapshot.data!.exists) {
-          return Text('Data not found');
-        }
+          if (!snapshot.hasData) {
+            return Text('No data available');
+          }
 
-        final Map<String, dynamic> data =
-            snapshot.data!.data() as Map<String, dynamic>;
+          final Map<String, dynamic> data = snapshot.data!;
+
+          String concatenatedData = "";
+          for (int i = 0; i < data.length; i += 2) {
+            concatenatedData += "${data[i]}: ${data[i + 1]}\n";
+          }
+
+          
 
         return MainLayoutPage(
           whiteBoxTopPadding: 0,
