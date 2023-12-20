@@ -9,7 +9,8 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:tap_scan/components/components.dart';
 
 class ScanValidate2 extends StatefulWidget {
-  const ScanValidate2({Key? key}) : super(key: key);
+  final List<String> ktpInner;
+  const ScanValidate2({super.key, required this.ktpInner});
 
   @override
   _ScanValidate2State createState() => _ScanValidate2State();
@@ -19,31 +20,40 @@ class _ScanValidate2State extends State<ScanValidate2> {
   late TextEditingController _ktpController;
 
   @override
+  void dispose() {
+    _ktpController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
+    String text = "";
+    for (var element in widget.ktpInner) {
+      text += element;
+    }
     super.initState();
-    _ktpController = TextEditingController();
+    _ktpController = TextEditingController(text: text ?? '');
     // Set nilai awal berdasarkan data dari API Flask
-    fetchKtpDataFromApi();
+    // fetchKtpDataFromApi();
 
-    // dummy data untuk data ktp
-    List<String> dummyData = [
-      "nik",
-      "2141720117",
-      "nama",
-      "Ziedny",
-      "tempatTanggalLahir",
-      "11-06-2003",
-      "jenisKelamin",
-      "laki-laki",
-      "alamat",
-      "JL.alamat"
-    ];
+    // // dummy data untuk data ktp
+    // List<String> dummyData = [
+    //   "nik",
+    //   "2141720117",
+    //   "nama",
+    //   "Ziedny",
+    //   "tempatTanggalLahir",
+    //   "11-06-2003",
+    //   "jenisKelamin",
+    //   "laki-laki",
+    //   "alamat",
+    //   "JL.alamat"
+    // ];
 
-    // Concatenate the list elements into one string with "\n" as the separator
-    String concatenatedDummyData = dummyData.join("\n");
-    setState(() {
-      _ktpController.text = concatenatedDummyData;
-    });
+    // // Concatenate the list elements into one string with "\n" as the separator
+    // // setState(() {
+    // _ktpController.text = widget.ktpInner;
+    // });
   }
 
   Future<void> fetchKtpDataFromApi() async {
@@ -71,7 +81,8 @@ class _ScanValidate2State extends State<ScanValidate2> {
 
   Future<void> updateFirestoreData() async {
     try {
-      final userUid = FirebaseAuth.instance.currentUser; // Ganti dengan cara Anda mendapatkan UID pengguna
+      final userUid = FirebaseAuth.instance
+          .currentUser; // Ganti dengan cara Anda mendapatkan UID pengguna
 
       await FirebaseFirestore.instance
           .collection('users')
@@ -178,7 +189,9 @@ class ScanResult extends StatelessWidget {
 void main() {
   runApp(
     const MaterialApp(
-      home: ScanValidate2(),
+      home: ScanValidate2(
+        ktpInner: [],
+      ),
     ),
   );
 }

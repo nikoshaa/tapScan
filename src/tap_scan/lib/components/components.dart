@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -581,6 +582,12 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
   String? method;
 
   @override
+  void dispose() {
+    // Cancel any ongoing asynchronous operations here
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 500,
@@ -744,8 +751,7 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
     // final length = await filePath.length();
     const apiUrl =
         // "https://fkmjq5h3-5006.asse.devtunnels.ms/media/upload";
-        "https://9452-114-6-31-174.ngrok-free.app/media/upload";
-        
+        "https://sjqq06bn-5006.asse.devtunnels.ms/media/upload";
 
     final uri = Uri.parse(apiUrl);
 
@@ -788,13 +794,20 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
       // Read the response data
       final responseData = await response.stream.bytesToString();
 
+      // Assuming responseData is a JSON string
+      final Map<String, dynamic> jsonData = json.decode(responseData);
+
       if (response.statusCode == 200) {
         print('File uploaded successfully');
-        print('Response Data: $responseData');
+        print('Response Data: $jsonData');
+
+        List<String> detectedWords =
+            List<String>.from(jsonData['detected_words']);
+
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const ScanValidate2(),
+            builder: (context) => ScanValidate2(ktpInner: detectedWords),
           ),
         );
       } else {
