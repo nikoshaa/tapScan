@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -580,6 +582,7 @@ class ModalBottomSheetContent extends StatefulWidget {
 class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
   File? selectedImage;
   String? method;
+  String? detectedWords;
 
   @override
   void dispose() {
@@ -815,6 +818,28 @@ class _ModalBottomSheetContentState extends State<ModalBottomSheetContent> {
       }
     } catch (error) {
       print('Error uploading file: $error');
+    }
+  }
+
+  Future<void> updateFirestoreData() async {
+    try {
+      final userUid = FirebaseAuth.instance
+          .currentUser; // Ganti dengan cara Anda mendapatkan UID pengguna
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userUid as String?)
+          .collection('ktps')
+          .doc('nik')
+          .set({
+        'isi': detectedWords,
+        'foto': selectedImage,
+      });
+
+      print('Data updated successfully in Firestore.');
+    } catch (error) {
+      // Handle error
+      print('Failed to update data in Firestore: $error');
     }
   }
 }
